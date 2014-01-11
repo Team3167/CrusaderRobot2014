@@ -42,12 +42,14 @@ public class RobotTemplate extends IterativeRobot
         private JoystickButton button10;
         private JoystickButton button11;
         private JoystickButton button12;
-	//private Compressor compressor;
+        // Driver Station Message thing
 	private final DriverStationLCD msg = DriverStationLCD.getInstance();
-	private double setSpeed;
+	// variables
+        private double setSpeed;
 	private double variance;
 	private boolean varianceToggle;
 	private boolean reset;
+        //private Compressor compressor;
     /**
      * This function is run when the robot is first started up and should be
      * used for any initialization code.
@@ -71,11 +73,11 @@ public class RobotTemplate extends IterativeRobot
                 button10 = new JoystickButton(driver, 10);
                 button11 = new JoystickButton(driver, 11);
                 button12 = new JoystickButton(driver, 12);
-		//compressor = new Compressor(1,1);
 		setSpeed = 0.0;
 		variance = 1;
 		varianceToggle = false;
 		reset = false;
+                //compressor = new Compressor(1,1);
 	}
 
 	public void disabledInit()
