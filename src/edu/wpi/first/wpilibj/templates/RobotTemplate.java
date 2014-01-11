@@ -37,6 +37,11 @@ public class RobotTemplate extends IterativeRobot
 	private JoystickButton button5;
 	private JoystickButton button6;
 	private JoystickButton button7;
+        private JoystickButton button8;
+        private JoystickButton button9;
+        private JoystickButton button10;
+        private JoystickButton button11;
+        private JoystickButton button12;
 	//private Compressor compressor;
 	private final DriverStationLCD msg = DriverStationLCD.getInstance();
 	private double setSpeed;
@@ -61,6 +66,11 @@ public class RobotTemplate extends IterativeRobot
 		button5 = new JoystickButton(driver, 5);
 		button6 = new JoystickButton(driver, 6);
 		button7 = new JoystickButton(driver, 7);
+                button8 = new JoystickButton(driver, 8);
+                button9 = new JoystickButton(driver, 9);
+                button10 = new JoystickButton(driver, 10);
+                button11 = new JoystickButton(driver, 11);
+                button12 = new JoystickButton(driver, 12);
 		//compressor = new Compressor(1,1);
 		setSpeed = 0.0;
 		variance = 1;
