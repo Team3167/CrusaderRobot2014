@@ -106,15 +106,14 @@ public class RobotTemplate extends IterativeRobot
 		{
 			setAllMotors(setSpeed, variance);
 		}
-		else
-		{
-			setAllMotors(0.0);
-		}
-
-		if(driver.getRawButton(3))
+		if(button3.IsPressed())
 		{
 			setAllMotors(setSpeed * -1);
 			printSpeed(setSpeed);
+		}
+		else
+		{
+			setAllMotors(0.0);
 		}
 
 		if(button4.HasJustBeenPressed())
