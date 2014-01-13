@@ -169,16 +169,19 @@ public class RobotTemplate extends IterativeRobot
 
     public void printSpeed(double speed)
     {
+        msg.clear();
+        int number;
+        number = (int) speed * 100;  // make sure this works right
         if (varianceToggle) 
         {
-            msg.println(DriverStationLCD.Line.kUser2, 1, "varaince is: ");
+            msg.println(DriverStationLCD.Line.kUser2, 1, "varaince is: " 
+                + number);
         } 
         else 
         {
-            msg.println(DriverStationLCD.Line.kUser2, 1, "speed is: ");
+            msg.println(DriverStationLCD.Line.kUser2, 1, "speed is: "
+                + number);
         }
-
-        msg.println(DriverStationLCD.Line.kUser2, 1, "" + speed + "");
         msg.updateLCD();
     }
 }
