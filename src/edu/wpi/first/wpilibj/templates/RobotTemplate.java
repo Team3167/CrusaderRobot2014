@@ -8,8 +8,11 @@
 package edu.wpi.first.wpilibj.templates;
 
 
-import edu.wpi.first.wpilibj.*;
-import judge.util.*;
+import edu.wpi.first.wpilibj.DriverStationLCD;
+import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.Joystick;
+import judge.util.JoystickButton;
 
  /* The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -106,7 +109,7 @@ public class RobotTemplate extends IterativeRobot
 		{
 			setAllMotors(setSpeed, variance);
 		}
-		if(button3.IsPressed())
+		else if(button3.IsPressed())
 		{
 			setAllMotors(setSpeed * -1);
 			printSpeed(setSpeed);
@@ -116,16 +119,20 @@ public class RobotTemplate extends IterativeRobot
 			setAllMotors(0.0);
 		}
 
-		if(button4.HasJustBeenPressed())
+		if(button4.IsPressed())
 		{
-			varianceToggle = !varianceToggle;
+			varianceToggle = true;
+		}
+		else
+		{
+			varianceToggle = false;
 		}
 	}
 
 
 	public void setAllMotors(double speed)
 	{
-		frontL.set(-speed);
+		frontL.set(speed);
 		frontR.set(speed);
 		backL.set(-speed);
 		backR.set(speed);
@@ -133,7 +140,7 @@ public class RobotTemplate extends IterativeRobot
 
 	public void setAllMotors(double speed, double variance)
 	{
-		frontL.set(-speed);
+		frontL.set(speed);
 		frontR.set(speed);
 		backL.set(-speed * variance);
 		backR.set(speed * variance);
@@ -142,9 +149,13 @@ public class RobotTemplate extends IterativeRobot
 	public void printSpeed(double speed)
 	{
 		if(varianceToggle)
-		msg.println(DriverStationLCD.Line.kUser2, 1, "varaince is: ");
+		{
+			msg.println(DriverStationLCD.Line.kUser2, 1, "varaince is: ");
+		}
 		else
-		msg.println(DriverStationLCD.Line.kUser2, 1, "speed is: ");
+		{
+			msg.println(DriverStationLCD.Line.kUser2, 1, "speed is: ");
+		}
 
 		msg.println(DriverStationLCD.Line.kUser2, 1, "" + speed + "");
 		msg.updateLCD();
