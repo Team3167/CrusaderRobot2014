@@ -34,13 +34,13 @@ public class PIDControllerII
 
     // Anti-windup mechanism for controller gain
     private final int queueSize;
-	private final double saturation;
+    private final double saturation;
     private double[] integralQueue;
     private double integralValue = 0.0;
     private int queuePointer = 0;
 
-	// Running frequency
-	private final double freq;// [Hz]
+    // Running frequency
+    private final double freq;// [Hz]
 
     // Methods
 	/**
@@ -59,11 +59,11 @@ public class PIDControllerII
         Kp = _Kp;
         Ki = _Ki;
 
-		freq = _freq;
+        freq = _freq;
 
         // Initialize the anti-windup objects
         queueSize = _queueSize;
-		saturation = 0.0;
+        saturation = 0.0;
         if (queueSize > 0)
             integralQueue = new double[queueSize];
     }
@@ -85,11 +85,11 @@ public class PIDControllerII
         Kp = _Kp;
         Ki = _Ki;
 
-		freq = _freq;
+        freq = _freq;
 
         // Initialize the anti-windup objects
         queueSize = 0;
-		saturation = _saturation;
+        saturation = _saturation;
         if (queueSize > 0)
             integralQueue = new double[queueSize];
     }
@@ -117,7 +117,7 @@ public class PIDControllerII
         Ki = _Ki;
         Kd = _Kd;
 
-		freq = _freq;
+        freq = _freq;
 
         // Create the filter object (if specified)
         if (omega > 0 && freq > 0)
@@ -125,7 +125,7 @@ public class PIDControllerII
 
         // Initialize the anti-windup objects
         queueSize = _queueSize;
-		saturation = 0.0;
+        saturation = 0.0;
         if (queueSize > 0)
             integralQueue = new double[queueSize];
     }
@@ -153,7 +153,7 @@ public class PIDControllerII
         Ki = _Ki;
         Kd = _Kd;
 
-		freq = _freq;
+        freq = _freq;
 
         // Create the filter object (if specified)
         if (omega > 0 && freq > 0)
@@ -161,7 +161,7 @@ public class PIDControllerII
 
         // Initialize the anti-windup objects
         queueSize = 0;
-		saturation = _saturation;
+        saturation = _saturation;
         if (queueSize > 0)
             integralQueue = new double[queueSize];
     }
@@ -177,7 +177,7 @@ public class PIDControllerII
 	 */
     public double DoControl(double command, double feedback)
     {
-		return DoControl(command - feedback);
+        return DoControl(command - feedback);
     }
 	
 	public double DoControl(double newError)
