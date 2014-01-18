@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import judge.util.JoystickButton;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,26 +24,66 @@ import edu.wpi.first.wpilibj.RobotDrive;
 public class RobotTemplate extends IterativeRobot {
 
 	private Joystick driver;
-	private Jaguar leftMotor;
-	private Jaguar rightMotor;
+	private JoystickButton button1;
+    private JoystickButton button2;
+    private JoystickButton button3;
+    private JoystickButton button4;
+    private JoystickButton button5;
+    private JoystickButton button6;
+    private JoystickButton button7;
+    private JoystickButton button8;
+    private JoystickButton button9;
+    private JoystickButton button10;
+    private JoystickButton button11;
+    private JoystickButton button12;
+	private Jaguar leftDrive;
+	private Jaguar rightDrive;
+	private Jaguar leftGrabber;
+	private Jaguar rightGrabber;
+	private Jaguar grabberSpinner;
 	private RobotDrive drive;
-	private double setSpeed;
 
     public void robotInit() {
 
 		driver = new Joystick(1);
-		leftMotor = new Jaguar(1, 1);
-		rightMotor = new Jaguar(1, 2);
-		drive = new RobotDrive(leftMotor, rightMotor);
-		setSpeed = 0.0;
+		button1 = new JoystickButton(driver, 1);
+		button2 = new JoystickButton(driver, 2);
+		button3 = new JoystickButton(driver, 3);
+		button4 = new JoystickButton(driver, 4);
+		button5 = new JoystickButton(driver, 5);
+		button6 = new JoystickButton(driver, 6);
+		button7 = new JoystickButton(driver, 7);
+		button8 = new JoystickButton(driver, 8);
+		button9 = new JoystickButton(driver, 9);
+		button10 = new JoystickButton(driver, 10);
+		button11 = new JoystickButton(driver, 11);
+		button12 = new JoystickButton(driver, 12);
+		leftDrive = new Jaguar(1, 1);
+		rightDrive = new Jaguar(1, 4);
+		leftGrabber = new Jaguar(1, 3);
+		rightGrabber = new Jaguar(1, 2);
+		grabberSpinner = new Jaguar(1, 5);
+
+
+		drive = new RobotDrive(leftDrive, rightDrive);
+    }
+
+   public void disabledInit()
+    {
+        System.out.println("The Robot is ready to Rock and Roll!");
+    }
+
+    public void disabledContinuous()
+    {
+        //nothing goes here!
     }
 
     /**
      * This function is called periodically during autonomous
      */
-    public void autonomousPeriodic() {
-
-
+    public void autonomousPeriodic()
+    {
+        //no autonomous yet
     }
 
     /**
@@ -51,17 +92,35 @@ public class RobotTemplate extends IterativeRobot {
     public void teleopPeriodic() {
 
 		drive.arcadeDrive(driver);
-		setSpeed = driver.getThrottle();
-		if(driver.getRawButton(1))
+
+		double speed = .2;
+		if(button5.IsPressed())
 		{
-		  leftMotor.set(setSpeed);
-		  rightMotor.set(setSpeed);
+		  leftGrabber.set(speed);
+		  rightGrabber.set(speed);
+		}
+		else if(button3.IsPressed())
+		{
+			leftGrabber.set(-speed);
+			rightGrabber.set(-speed);
 		}
 		else
 		{
-		  leftMotor.set(0.0);
-		  rightMotor.set(0.0);
+		  leftGrabber.set(0.0);
+		  rightGrabber.set(0.0);
+		}
+
+		if(button6.IsPressed())
+		{
+			grabberSpinner.set(1.0);
+		}
+		else if(button4.IsPressed())
+		{
+			grabberSpinner.set(-1.0);
+		}
+		else
+		{
+			grabberSpinner.set(0.0);
 		}
     }
-
 }
