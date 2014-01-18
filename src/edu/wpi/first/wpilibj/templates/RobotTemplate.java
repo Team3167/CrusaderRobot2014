@@ -45,7 +45,7 @@ public class RobotTemplate extends IterativeRobot {
 
     public void robotInit() {
 
-		driver = new Joystick(1);
+		driver = new Joystick(2);
 		button1 = new JoystickButton(driver, 1);
 		button2 = new JoystickButton(driver, 2);
 		button3 = new JoystickButton(driver, 3);
@@ -68,12 +68,17 @@ public class RobotTemplate extends IterativeRobot {
 		drive = new RobotDrive(leftDrive, rightDrive);
     }
 
-   public void disabledInit()
+	public void disabledInit()
     {
         System.out.println("The Robot is ready to Rock and Roll!");
     }
 
     public void disabledContinuous()
+    {
+        //nothing goes here!
+    }
+
+	public void disabledPeriodic()
     {
         //nothing goes here!
     }
@@ -91,9 +96,9 @@ public class RobotTemplate extends IterativeRobot {
      */
     public void teleopPeriodic() {
 
-		drive.arcadeDrive(driver);
+		drive.arcadeDrive(-driver.getY(), -driver.getTwist());
 
-		double speed = .2;
+		double speed = .7;
 		if(button5.IsPressed())
 		{
 		  leftGrabber.set(speed);
