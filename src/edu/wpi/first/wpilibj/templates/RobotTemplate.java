@@ -57,10 +57,10 @@ public class RobotTemplate extends IterativeRobot
      */
     public void robotInit()
     {
-        frontL = new Jaguar(1, 1);
-        backL = new Jaguar(1, 2);
-        frontR = new Jaguar(1, 3);
-        backR = new Jaguar(1, 4);
+        backR = new Jaguar(1, 1);
+        frontR = new Jaguar(1, 2);
+        backL = new Jaguar(1, 3);
+        frontL = new Jaguar(1, 4);
         driver = new Joystick(2);
         button1 = new JoystickButton(driver, 1);
         button2 = new JoystickButton(driver, 2);
