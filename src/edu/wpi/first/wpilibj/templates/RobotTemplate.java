@@ -41,6 +41,10 @@ public class RobotTemplate extends IterativeRobot {
 	private Jaguar leftGrabber;
 	private Jaguar rightGrabber;
 	private Jaguar grabberSpinner;
+	private Jaguar shooterBL;
+	private Jaguar shooterBR;
+	private Jaguar shooterFL;
+	private Jaguar shooterFR;
 	private RobotDrive drive;
 
     public void robotInit() {
@@ -63,8 +67,10 @@ public class RobotTemplate extends IterativeRobot {
 		leftGrabber = new Jaguar(1, 3);
 		rightGrabber = new Jaguar(1, 2);
 		grabberSpinner = new Jaguar(1, 5);
-
-
+		shooterBL = new Jaguar(1,6);
+		shooterBR = new Jaguar(1,7);
+		shooterFL = new Jaguar(1, 8);
+		shooterFR =	new Jaguar(1, 9);
 		drive = new RobotDrive(leftDrive, rightDrive);
     }
 
@@ -98,13 +104,17 @@ public class RobotTemplate extends IterativeRobot {
 
 		drive.arcadeDrive(-driver.getY(), -driver.getTwist());
 
+//driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
+//driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
+
+
 		double speed = .7;
-		if(button5.IsPressed())
+		if(driver.getRawAxis(6) == -1)
 		{
 		  leftGrabber.set(speed);
 		  rightGrabber.set(speed);
 		}
-		else if(button3.IsPressed())
+		else if(driver.getRawAxis(6) == 1)
 		{
 			leftGrabber.set(-speed);
 			rightGrabber.set(-speed);
@@ -115,11 +125,11 @@ public class RobotTemplate extends IterativeRobot {
 		  rightGrabber.set(0.0);
 		}
 
-		if(button6.IsPressed())
+		if(button5.IsPressed())
 		{
 			grabberSpinner.set(1.0);
 		}
-		else if(button4.IsPressed())
+		else if(button3.IsPressed())
 		{
 			grabberSpinner.set(-1.0);
 		}
