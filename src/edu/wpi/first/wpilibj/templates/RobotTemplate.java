@@ -125,7 +125,7 @@ public class RobotTemplate extends IterativeRobot
                 setSpeed = 1;
             }
             else if (setSpeed < 0)
-        {
+            {
                 setSpeed = 0;
             }
             printSpeed(setSpeed);
