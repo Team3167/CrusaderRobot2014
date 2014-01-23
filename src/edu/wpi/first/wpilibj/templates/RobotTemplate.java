@@ -132,11 +132,11 @@ public class RobotTemplate extends IterativeRobot {
 		  rightGrabber.set(0.0);
 		}
 
-		if(button5.IsPressed())
+		if(button3.IsPressed())
 		{
 			grabberSpinner.set(1.0);
 		}
-		else if(button3.IsPressed())
+		else if(button5.IsPressed())
 		{
 			grabberSpinner.set(-1.0);
 		}
