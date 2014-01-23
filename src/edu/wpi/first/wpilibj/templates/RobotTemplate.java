@@ -8,6 +8,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
@@ -46,6 +47,10 @@ public class RobotTemplate extends IterativeRobot {
 	private Jaguar shooterFL;
 	private Jaguar shooterFR;
 	private RobotDrive drive;
+	private double setSpeed;
+    private double variance;
+    private boolean varianceToggle;
+	private final DriverStationLCD msg = DriverStationLCD.getInstance();
 
     public void robotInit() {
 
@@ -72,6 +77,9 @@ public class RobotTemplate extends IterativeRobot {
 		shooterFL = new Jaguar(1, 8);
 		shooterFR =	new Jaguar(1, 9);
 		drive = new RobotDrive(leftDrive, rightDrive);
+		setSpeed = 0.0;
+        variance = 1;
+        varianceToggle = false;
     }
 
 	public void disabledInit()
@@ -107,7 +115,6 @@ public class RobotTemplate extends IterativeRobot {
 //driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
 //driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
 
-
 		double speed = .7;
 		if(driver.getRawAxis(6) == -1)
 		{
@@ -137,5 +144,92 @@ public class RobotTemplate extends IterativeRobot {
 		{
 			grabberSpinner.set(0.0);
 		}
+
+		if (varianceToggle)
+        {
+            variance = ((driver.getThrottle() * -1 / 2) + .5);
+            if (variance > 1)
+            {
+                variance = 1;
+            }
+            else if (variance < 0)
+            {
+                variance = 0;
+            }
+            printSpeed(variance);
+        }
+        else
+        {
+            setSpeed = ((driver.getThrottle() * -1 / 2) + .5);
+            if (setSpeed > 1)
+            {
+                setSpeed = 1;
+            }
+            else if (setSpeed < 0)
+            {
+                setSpeed = 0;
+            }
+            printSpeed(setSpeed);
+        }
+
+        if (button4.IsPressed())
+        {
+            setAllMotors(setSpeed, variance);
+        }
+        else if (button6.IsPressed())
+        {
+            setAllMotors(setSpeed * -1, variance);
+            printSpeed(setSpeed);
+        }
+        else
+        {
+            setAllMotors(0.0, variance);
+        }
+
+        if (button8.IsPressed())
+        {
+            varianceToggle = true;
+        }
+		else
+		{
+			varianceToggle = false;
+		}
     }
+
+    public void setAllMotors(double speed, double variance)
+    {
+        if (speed <= 0)
+        {
+            shooterFL.set(-speed);
+            shooterFR.set(speed);
+            shooterBL.set(-speed);
+            shooterBR.set(speed);
+        }
+        else
+        {
+            shooterFL.set(-speed);
+            shooterFR.set(speed);
+            shooterBL.set(-speed * variance);
+            shooterBR.set(speed * variance);
+        }
     }
+
+    public void printSpeed(double speed)
+    {
+        msg.clear();
+        int number;
+        number = (int) (speed * 100);  // make sure this works right
+        if (varianceToggle)
+        {
+            msg.println(DriverStationLCD.Line.kUser2, 1, "Varaince is: "
+                + number);
+        }
+        else
+        {
+            msg.println(DriverStationLCD.Line.kUser2, 1, "Speed is: "
+                + number);
+        }
+        msg.updateLCD();
+    }
+}
+
