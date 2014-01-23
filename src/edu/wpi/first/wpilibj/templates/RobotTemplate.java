@@ -217,8 +217,7 @@ public class RobotTemplate extends IterativeRobot {
     public void printSpeed(double speed)
     {
         msg.clear();
-        int number;
-        number = (int) (speed * 100);
+        int number = (int) (speed * 100);
         if (varianceToggle)
         {
             msg.println(DriverStationLCD.Line.kUser2, 1, "Varaince is: "
