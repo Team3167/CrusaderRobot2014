@@ -1,14 +1,10 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project basedir="." default="help" name="CrusaderRobot2014">
-=======
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project basedir="." default="help" name="LearningToCodeTemplate">
->>>>>>> branch 'master' of https://github.com/Team3167/2014TestBed
+<project basedir="." default="help" name="CrusaderRobot2014">
 
 <!-- You may freely edit this file. See commented blocks below for -->
 <!-- some examples of how to customize the build. -->
 
     <!--
-    
+
     The master build file lives at: ${sunspot.home}/build.xml.
 
     If you do not have a Sun SPOT properties file for some reason,
@@ -64,7 +60,7 @@
       debug-proxy-run        start the proxy for the high-level debugger
 
     Some useful command line properties:
-              	
+
       -Dbasestation.addr=1234   set the address of the basestation
       -DremoteId=1234           set the target for remote run/deploy/debug-proxy-run
       -Dsquawk.startup.class=com.example.MyStartUp
@@ -73,11 +69,11 @@
       -Djar.file=example.jar    set the jar file for jar-app, jar-deploy and make-host-jar
       -Dmidlet=2                select a midlet to run for selectapplication
                                 or deploy targets (defaults to 1)
-      -Dutility.jars=utils.jar  a classpath separator delimited list of jars to be 
+      -Dutility.jars=utils.jar  a classpath separator delimited list of jars to be
               	                included with the application
 
-    There exist several targets which are by default empty and which can be 
-    used for execution of your tasks. These targets are usually executed 
+    There exist several targets which are by default empty and which can be
+    used for execution of your tasks. These targets are usually executed
     before and after some main targets. They are defined as follows:
 
         For each target above (except help),
@@ -89,7 +85,7 @@
 
         <target name="-post-compile">
             <echo>Compile finished!</echo>
-        </target>    
+        </target>
 
     For more information on using ant, see http://ant.apache.org.
 
