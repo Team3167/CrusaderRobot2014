@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) FIRST 2008. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package edu.wpi.first.wpilibj.templates;
 
 
@@ -16,11 +9,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import judge.util.JoystickButton;
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the IterativeRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
+ *
  */
 public class RobotTemplate extends IterativeRobot {
 
@@ -44,6 +33,8 @@ public class RobotTemplate extends IterativeRobot {
 	private Jaguar grabberSpinner;
 	private Jaguar shooterBL;
 	private Jaguar shooterBR;
+	private Jaguar shooterMR;
+	private Jaguar shooterML;
 	private Jaguar shooterFL;
 	private Jaguar shooterFR;
 	private RobotDrive drive;
@@ -72,10 +63,12 @@ public class RobotTemplate extends IterativeRobot {
 		leftGrabber = new Jaguar(1, 3);
 		rightGrabber = new Jaguar(1, 2);
 		grabberSpinner = new Jaguar(1, 5);
-		shooterBL = new Jaguar(1,6);
-		shooterBR = new Jaguar(1,7);
-		shooterFL = new Jaguar(1, 8);
-		shooterFR =	new Jaguar(1, 9);
+		shooterBL = new Jaguar(2,1);
+		shooterBR = new Jaguar(2,2);
+		shooterML = new Jaguar(2, 3);
+		shooterMR = new Jaguar(2, 4);
+		shooterFL = new Jaguar(2, 5);
+		shooterFR =	new Jaguar(2, 6);
 		drive = new RobotDrive(leftDrive, rightDrive);
 		setSpeed = 0.0;
         variance = 1;
@@ -119,12 +112,12 @@ public class RobotTemplate extends IterativeRobot {
 		if(driver.getRawAxis(6) == -1)
 		{
 		  leftGrabber.set(speed);
-		  rightGrabber.set(speed);
+		  rightGrabber.set(speed);// * 1.0128125);// Mark's code (this line)find the right number
 		}
 		else if(driver.getRawAxis(6) == 1)
 		{
 			leftGrabber.set(-speed);
-			rightGrabber.set(-speed);
+			rightGrabber.set(-speed);// * 1.0128125);// Mark's code (and this one)find the right number
 		}
 		else
 		{
@@ -202,6 +195,8 @@ public class RobotTemplate extends IterativeRobot {
         {
             shooterFL.set(-speed);
             shooterFR.set(speed);
+			shooterML.set(-speed);
+			shooterMR.set(speed);
             shooterBL.set(-speed);
             shooterBR.set(speed);
         }
@@ -209,8 +204,10 @@ public class RobotTemplate extends IterativeRobot {
         {
             shooterFL.set(-speed);
             shooterFR.set(speed);
-            shooterBL.set(-speed * variance);
-            shooterBR.set(speed * variance);
+			shooterML.set(-speed * variance);
+			shooterMR.set(speed * variance);
+            shooterBL.set(-speed * (variance* variance));
+            shooterBR.set(speed * (variance * variance));
         }
     }
 
