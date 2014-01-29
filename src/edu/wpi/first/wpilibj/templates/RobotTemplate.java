@@ -112,7 +112,7 @@ public class RobotTemplate extends IterativeRobot {
 		if(driver.getRawAxis(6) == -1)
 		{
 		  leftGrabber.set(speed);
-		  rightGrabber.set(speed);// * 1.0128125);// Mark's code (this line)find the right number
+		  rightGrabber.set(speed * 1.0128125);// Mark's code (this line)find the right number
 		}
 		else if(driver.getRawAxis(6) == 1)
 		{

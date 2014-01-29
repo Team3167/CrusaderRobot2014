@@ -1,5 +1,9 @@
 <project basedir="." default="help" name="CrusaderRobot2014">
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch 'master' of https://github.com/Team3167/CrusaderRobot2014.git
 <!-- You may freely edit this file. See commented blocks below for -->
 <!-- some examples of how to customize the build. -->
 
