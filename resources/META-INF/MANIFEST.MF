@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 MIDlet-Name: CrusaderRobot2014
-=======
-MIDlet-Name: LearningToCodeTemplate
->>>>>>> branch 'master' of https://github.com/Team3167/2014TestBed
 MIDlet-Version: 1.0.0
 MIDlet-Vendor: FIRST
 MIDlet-1: RobotTemplate, , edu.wpi.first.wpilibj.templates.RobotTemplate
