@@ -9,60 +9,92 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import judge.util.JoystickButton;
 
 /**
- *
+ * This is the code for the 2014 Crusader Robot "Fido"
+ * it uses 2 digital sidecars this year.
+ * All of this code is available from github.com/Team3167/CrusaderRobot2014
+ * there is also a wiki page on the github so that people can find the
+ * controls.
+ * @author Eric Slaweski
  */
-public class RobotTemplate extends IterativeRobot {
-
+public class RobotTemplate extends IterativeRobot
+{
 	private Joystick driver;
-	private JoystickButton button1;
-    private JoystickButton button2;
-    private JoystickButton button3;
-    private JoystickButton button4;
-    private JoystickButton button5;
-    private JoystickButton button6;
-    private JoystickButton button7;
-    private JoystickButton button8;
-    private JoystickButton button9;
-    private JoystickButton button10;
-    private JoystickButton button11;
-    private JoystickButton button12;
+	private Joystick shooter;
+	private JoystickButton driver1;
+    private JoystickButton driver2;
+    private JoystickButton driver3;
+    private JoystickButton driver4;
+    private JoystickButton driver5;
+    private JoystickButton driver6;
+    private JoystickButton driver7;
+    private JoystickButton driver8;
+    private JoystickButton driver9;
+    private JoystickButton driver10;
+    private JoystickButton driver11;
+    private JoystickButton driver12;
+	private JoystickButton shooter1;
+    private JoystickButton shooter2;
+    private JoystickButton shooter3;
+    private JoystickButton shooter4;
+    private JoystickButton shooter5;
+    private JoystickButton shooter6;
+    private JoystickButton shooter7;
+    private JoystickButton shooter8;
+    private JoystickButton shooter9;
+    private JoystickButton shooter10;
+    private JoystickButton shooter11;
+    private JoystickButton shooter12;
 	private Jaguar leftDrive;
 	private Jaguar rightDrive;
 	private Jaguar leftGrabber;
 	private Jaguar rightGrabber;
 	private Jaguar grabberSpinner;
-	private Jaguar shooterBL;
-	private Jaguar shooterBR;
-	private Jaguar shooterMR;
-	private Jaguar shooterML;
-	private Jaguar shooterFL;
-	private Jaguar shooterFR;
+	private Jaguar shooterBL; //Back left
+	private Jaguar shooterBR; //Back right
+	private Jaguar shooterMR; //Middle right
+	private Jaguar shooterML; //Middle left
+	private Jaguar shooterFR; //Front Right
+	private Jaguar shooterFL; //Front left
 	private RobotDrive drive;
 	private double setSpeed;
     private double variance;
     private boolean varianceToggle;
 	private final DriverStationLCD msg = DriverStationLCD.getInstance();
 
-    public void robotInit() {
-
-		driver = new Joystick(2);
-		button1 = new JoystickButton(driver, 1);
-		button2 = new JoystickButton(driver, 2);
-		button3 = new JoystickButton(driver, 3);
-		button4 = new JoystickButton(driver, 4);
-		button5 = new JoystickButton(driver, 5);
-		button6 = new JoystickButton(driver, 6);
-		button7 = new JoystickButton(driver, 7);
-		button8 = new JoystickButton(driver, 8);
-		button9 = new JoystickButton(driver, 9);
-		button10 = new JoystickButton(driver, 10);
-		button11 = new JoystickButton(driver, 11);
-		button12 = new JoystickButton(driver, 12);
+    public void robotInit()
+	{
+		driver = new Joystick(2);// the right Joystick
+		driver1 = new JoystickButton(driver, 1);
+		driver2 = new JoystickButton(driver, 2);
+		driver3 = new JoystickButton(driver, 3);
+		driver4 = new JoystickButton(driver, 4);
+		driver5 = new JoystickButton(driver, 5);
+		driver6 = new JoystickButton(driver, 6);
+		driver7 = new JoystickButton(driver, 7);
+		driver8 = new JoystickButton(driver, 8);
+		driver9 = new JoystickButton(driver, 9);
+		driver10 = new JoystickButton(driver, 10);
+		driver11 = new JoystickButton(driver, 11);
+		driver12 = new JoystickButton(driver, 12);
+		shooter = new Joystick(1);// the left Joystick
+		shooter1 = new JoystickButton(shooter, 1);
+		shooter2 = new JoystickButton(shooter, 2);
+		shooter3 = new JoystickButton(shooter, 3);
+		shooter4 = new JoystickButton(shooter, 4);
+		shooter5 = new JoystickButton(shooter, 5);
+		shooter6 = new JoystickButton(shooter, 6);
+		shooter7 = new JoystickButton(shooter, 7);
+		shooter8 = new JoystickButton(shooter, 8);
+		shooter9 = new JoystickButton(shooter, 9);
+		shooter10 = new JoystickButton(shooter, 10);
+		shooter11 = new JoystickButton(shooter, 11);
+		shooter12 = new JoystickButton(shooter, 12);
 		leftDrive = new Jaguar(1, 1);
 		rightDrive = new Jaguar(1, 4);
 		leftGrabber = new Jaguar(1, 3);
 		rightGrabber = new Jaguar(1, 2);
 		grabberSpinner = new Jaguar(1, 5);
+		//Start using the second digital sidecar
 		shooterBL = new Jaguar(2,1);
 		shooterBR = new Jaguar(2,2);
 		shooterML = new Jaguar(2, 3);
@@ -78,6 +110,9 @@ public class RobotTemplate extends IterativeRobot {
 	public void disabledInit()
     {
         System.out.println("The Robot is ready to Rock and Roll!");
+		msg.clear();
+		//This msg.println doesnt work!
+		msg.println(DriverStationLCD.Line.kUser2, 1, "The Robot Is Ready To Rock And Roll!");
     }
 
     public void disabledContinuous()
@@ -90,31 +125,25 @@ public class RobotTemplate extends IterativeRobot {
         //nothing goes here!
     }
 
-    /**
-     * This function is called periodically during autonomous
-     */
     public void autonomousPeriodic()
     {
         //no autonomous yet
-    }
+	}
 
-    /**
-     * This function is called periodically during operator control
-     */
-    public void teleopPeriodic() {
-
-		drive.arcadeDrive(-driver.getY(), -driver.getTwist());
+    public void teleopPeriodic()
+	{
+		drive.arcadeDrive(-driver.getY(), -driver.getTwist()); // makin it easer to drive
 
 //driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
 //driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
 
 		double speed = .7;
-		if(driver.getRawAxis(6) == -1)
+		if(driver.getRawAxis(6) == -1 || shooter.getRawAxis(6) == -1)
 		{
 		  leftGrabber.set(speed);
-		  rightGrabber.set(speed * 1.0128125);// Mark's code (this line)find the right number
+		  rightGrabber.set(speed);// * 1.0128125);// Mark's code (this line)find the right number
 		}
-		else if(driver.getRawAxis(6) == 1)
+		else if(driver.getRawAxis(6) == 1 || shooter.getRawAxis(6) == 1)
 		{
 			leftGrabber.set(-speed);
 			rightGrabber.set(-speed);// * 1.0128125);// Mark's code (and this one)find the right number
@@ -125,11 +154,11 @@ public class RobotTemplate extends IterativeRobot {
 		  rightGrabber.set(0.0);
 		}
 
-		if(button3.IsPressed())
+		if(driver3.IsPressed() || shooter3.IsPressed())
 		{
 			grabberSpinner.set(1.0);
 		}
-		else if(button5.IsPressed())
+		else if(driver5.IsPressed() || shooter5.IsPressed())
 		{
 			grabberSpinner.set(-1.0);
 		}
@@ -138,9 +167,9 @@ public class RobotTemplate extends IterativeRobot {
 			grabberSpinner.set(0.0);
 		}
 
-		if (varianceToggle)
+		if (varianceToggle)// are we changeing the variance
         {
-            variance = ((driver.getThrottle() * -1 / 2) + .5);
+            variance = ((shooter.getThrottle() * -1 / 2) + .5);
             if (variance > 1)
             {
                 variance = 1;
@@ -153,7 +182,7 @@ public class RobotTemplate extends IterativeRobot {
         }
         else
         {
-            setSpeed = ((driver.getThrottle() * -1 / 2) + .5);
+            setSpeed = ((shooter.getThrottle() * -1 / 2) + .5);
             if (setSpeed > 1)
             {
                 setSpeed = 1;
@@ -165,11 +194,11 @@ public class RobotTemplate extends IterativeRobot {
             printSpeed(setSpeed);
         }
 
-        if (button4.IsPressed())
+        if (driver4.IsPressed() || shooter4.IsPressed())
         {
             setAllMotors(setSpeed, variance);
         }
-        else if (button6.IsPressed())
+        else if (driver6.IsPressed() || shooter6.IsPressed())
         {
             setAllMotors(setSpeed * -1, variance);
             printSpeed(setSpeed);
@@ -179,7 +208,7 @@ public class RobotTemplate extends IterativeRobot {
             setAllMotors(0.0, variance);
         }
 
-        if (button8.IsPressed())
+        if (shooter8.IsPressed())
         {
             varianceToggle = true;
         }
@@ -228,4 +257,3 @@ public class RobotTemplate extends IterativeRobot {
         msg.updateLCD();
     }
 }
-
