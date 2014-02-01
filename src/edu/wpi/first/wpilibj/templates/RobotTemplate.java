@@ -91,7 +91,6 @@ public class RobotTemplate extends IterativeRobot
 		shooter12 = new JoystickButton(shooter, 12);
 		leftDrive = new Jaguar(1, 1);
 		rightDrive = new Jaguar(1, 4);
-		leftGrabber = new Jaguar(1, 3);
 		rightGrabber = new Jaguar(1, 2);
 		grabberSpinner = new Jaguar(1, 5);
 		//Start using the second digital sidecar
@@ -111,7 +110,8 @@ public class RobotTemplate extends IterativeRobot
     {
         System.out.println("The Robot is ready to Rock and Roll!");
 		msg.clear();
-		msg.println(DriverStationLCD.Line.kUser2, 1, "The Robot Is Ready To Rock And Roll!");
+		msg.println(DriverStationLCD.Line.kUser2, 1, "The Robot Is Ready To");
+		msg.println(DriverStationLCD.Line.kUser3, 1, " Rock And Roll!");
 		msg.updateLCD();
     }
 
@@ -137,20 +137,18 @@ public class RobotTemplate extends IterativeRobot
 //driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
 //driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
 
-		double speed = .7;
+		double upSpeed = .6;//fightin against gravity
+		double downSpeed = -.15;//usin gravity
 		if(driver.getRawAxis(6) == -1 || shooter.getRawAxis(6) == -1)
 		{
-		  leftGrabber.set(speed);
-		  rightGrabber.set(speed);// * 1.0128125);// Mark's code (this line)find the right number
+		  rightGrabber.set(upSpeed);// * 1.0128125);// Mark's code (this line)find the right number
 		}
 		else if(driver.getRawAxis(6) == 1 || shooter.getRawAxis(6) == 1)
 		{
-			leftGrabber.set(-speed);
-			rightGrabber.set(-speed);// * 1.0128125);// Mark's code (and this one)find the right number
+			rightGrabber.set(downSpeed);// * 1.0128125);// Mark's code (and this one)find the right number
 		}
 		else
 		{
-		  leftGrabber.set(0.0);
 		  rightGrabber.set(0.0);
 		}
 
