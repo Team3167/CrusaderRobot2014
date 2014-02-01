@@ -111,8 +111,8 @@ public class RobotTemplate extends IterativeRobot
     {
         System.out.println("The Robot is ready to Rock and Roll!");
 		msg.clear();
-		//This msg.println doesnt work!
 		msg.println(DriverStationLCD.Line.kUser2, 1, "The Robot Is Ready To Rock And Roll!");
+		msg.updateLCD();
     }
 
     public void disabledContinuous()
