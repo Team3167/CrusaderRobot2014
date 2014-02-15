@@ -4,23 +4,20 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
-import edu.wpi.first.wpilibj.Jaguar;
+import edu.wpi.first.wpilibj.RobotDrive;
 /**
  *
  * @author Ryan Young
  */
-public class MotorController
-{
-  private Jaguar motor;
+public class DriveController
+{ 
+  private RobotDrive driver;
+  public static final double LEFT = -0.1;
+  public static final double RIGHT = 0.1;
 
-  public MotorController()
+  public DriveController(RobotDrive driver)
   {
-	motor = new Jaguar(1, 1);
-  }
-
-  public MotorController(Jaguar motor)
-  {
-	  this.motor = motor;
+	  this.driver = driver;
   }
 
   public void setCommand(double cmd)
@@ -28,12 +25,12 @@ public class MotorController
      if(cmd > 0.05)
 	 {
  		 incrementRight();
-		 System.out.println("Move Left");
+		 System.out.println("Move Right");
 	 }
 	 else if(cmd < -.05)
 	 {
  		 incrementLeft();
-		 System.out.println("Move Right");
+		 System.out.println("Move Left");
 	 }
 	 else
 	 {
@@ -43,16 +40,16 @@ public class MotorController
 
   private void incrementLeft()
   {
-	  motor.set(0.1);
+	  driver.arcadeDrive(0.0, LEFT);
   }
 
   private void incrementRight()
   {
-	  motor.set(-0.1);
+	  driver.arcadeDrive(0.0, RIGHT);
   }
 
   private void stop()
   {
-	  motor.set(0.0);
+	  driver.arcadeDrive(0.0, 0.0);
   }
 }

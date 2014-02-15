@@ -56,6 +56,8 @@ public class RobotTemplate extends IterativeRobot
 	private Jaguar shooterFR; //Front Right
 	private Jaguar shooterFL; //Front left
 	private RobotDrive drive;
+        private Aligner aligner;
+        private DriveController driveController;
 	private double setSpeed;
     private double variance;
     private boolean varianceToggle;
@@ -104,6 +106,8 @@ public class RobotTemplate extends IterativeRobot
 		shooterFL = new Jaguar(2, 5);
 		shooterFR =	new Jaguar(2, 6);
 		drive = new RobotDrive(leftDrive, rightDrive);
+                driveController = new DriveController(drive);
+                aligner = new Aligner();
 		setSpeed = 0.0;
         variance = 1;
         varianceToggle = false;
@@ -265,6 +269,10 @@ public class RobotTemplate extends IterativeRobot
 		{
 			varianceToggle = false;
 		}
+        if(driver10.IsPressed())
+        {
+            aligner.align(driveController);   //TODO: test this
+        }
     }
 
     public void setAllMotors(double speed, double variance)

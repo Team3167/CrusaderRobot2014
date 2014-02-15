@@ -27,82 +27,45 @@ public class Aligner
 	private Filter cmdFilter = new Filter(1.5, 1.0, 50.0);
 
 
-  public void align(MotorController motor)
+  public void align(DriveController drive)
   {
-
-    BarTracker tracker = new BarTracker();
-    //int i = 1;
-    //boolean done = false;
-   // breslin is awesome = false
-   // while (!done)
-   // {/
-	System.out.println("Before the try/catch");
+      
+      BarTracker tracker = new BarTracker();
       try
       {
         VisionTarget[] targets = tracker.getTarget();
-       /* VisionTarget target1 = targets[i - 1];
-        VisionTarget target2 = targets[i];*/
         double width = AxisCamera.getInstance().getResolution().width;
-		double targetPosition = width / 2.0;
-		double actualPosition = 0.0;// Put position measuring function here
-		double kp = 1.0;
-		double servoCommand;
-        //System.out.println(targets.length);
-		if (targets == null || targets[0] == null)
-		{
-			// Make camera oscillate at 0.5 Hz
-			servoCommand = 0.0;//oscillate();
-			System.out.println("Found 0");
-		}
-		else if (targets.length == 1)
-		{
-			// Center the camera on the target
-			System.out.println(targets[0].getRawXPosition());
-			actualPosition = targets[0].getRawXPosition();
-			System.out.println("Found 1");
-			servoCommand = ((actualPosition - targetPosition) / width) * kp;
+        double targetPosition = width / 2.0;
+        double actualPosition = 0.0;// Put position measuring function here
+        double kp = 1.0;
+        double servoCommand;
 
-		}
-		else  // Found both targets
-		{
-			// Center the camera between the two
-			actualPosition = xMidpoint(targets[0], targets[1]);
-			System.out.println("Found 2");
-			servoCommand = ((actualPosition - targetPosition) / width) * kp;
-
-		}
-        System.out.println(servoCommand);
-		motor.setCommand(cmdFilter.Apply(servoCommand));
-
-        /*if (target1 != null && target2 != null)
+        if (targets == null || targets[0] == null)
         {
-          System.out.println("Target " + (i - 1) + ": " + target1.toString());
-          System.out.println("Target " + i + ": " + target2.toString());
-          double posX = xMidpoint(target1, target2);
-          if ((posX > -.01 && posX < .01))
-          {
-            System.out.println("Target is in the Center!!!");
-            System.out.println("Servo moved: "+ servo.getAngleMoved());
-            if(i == targets.length)
-            {
-              done = true;
-            }
-          }
-          else if (posX < 0)
-          {
-            servo.incrementLeft();
-          }
-          else if (posX > 0)
-          {
-            servo.incrementRight();
-          }
+                // Make camera oscillate at 0.5 Hz
+                servoCommand = 0.0;//oscillate();
+                System.out.println("Found 0");
+        }
+        else if (targets.length == 1)
+        {
+                // Center the camera on the target
+                System.out.println(targets[0].getRawXPosition());
+                actualPosition = targets[0].getRawXPosition();
+                System.out.println("Found 1");
+                servoCommand = ((actualPosition - targetPosition) / width) * kp;
 
         }
-        else
+        else  // Found both targets
         {
-          System.out.println("No Target Found");
-        }*/
-        //i ++;
+                // Center the camera between the two
+                actualPosition = xMidpoint(targets[0], targets[1]);
+                System.out.println("Found 2");
+                servoCommand = ((actualPosition - targetPosition) / width) * kp;
+
+        }
+        System.out.println(servoCommand);
+	drive.setCommand(cmdFilter.Apply(servoCommand));
+
       }
       catch (Exception e)
       {
