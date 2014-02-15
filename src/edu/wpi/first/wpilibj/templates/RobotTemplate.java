@@ -14,7 +14,7 @@ import judge.util.JoystickButton;
  * All of this code is available from github.com/Team3167/CrusaderRobot2014
  * there is also a wiki page on the github so that people can find the
  * controls.
- * @author Eric Slaweski
+ * @author Eric Slaweski, Mark Macerator
  */
 public class RobotTemplate extends IterativeRobot
 {
@@ -60,6 +60,8 @@ public class RobotTemplate extends IterativeRobot
     private double variance;
     private boolean varianceToggle;
 	private final DriverStationLCD msg = DriverStationLCD.getInstance();
+	private double grabberArmSpeed;
+	private boolean grabberPreviouslyUp;
 
     public void robotInit()
 	{
@@ -92,6 +94,7 @@ public class RobotTemplate extends IterativeRobot
 		leftDrive = new Jaguar(1, 1);
 		rightDrive = new Jaguar(1, 4);
 		rightGrabber = new Jaguar(1, 2);
+		leftGrabber = new Jaguar(1, 3);
 		grabberSpinner = new Jaguar(1, 5);
 		//Start using the second digital sidecar
 		shooterBL = new Jaguar(2,1);
@@ -104,7 +107,7 @@ public class RobotTemplate extends IterativeRobot
 		setSpeed = 0.0;
         variance = 1;
         varianceToggle = false;
-    }
+	}
 
 	public void disabledInit()
     {
@@ -127,7 +130,17 @@ public class RobotTemplate extends IterativeRobot
 
     public void autonomousPeriodic()
     {
-        //no autonomous yet
+		double autoTime = 3.0; //time to drive in seconds
+		double count = 0.0;
+		while(count < (autoTime * 60))
+		{
+			drive.drive(1.0, 0.0); //drive forward
+			count++;
+		}
+		drive.drive(0.0, 0.0); //and then stop
+		//and then find the tape
+
+
 	}
 
     public void teleopPeriodic()
@@ -137,20 +150,58 @@ public class RobotTemplate extends IterativeRobot
 //driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
 //driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
 
+		double grabberSpeedIncrement = 60.0 * 0.3;			//Cycle rate in Hertz times speed up time in sec
 		double upSpeed = .6;//fightin against gravity
 		double downSpeed = -.15;//usin gravity
+		double speedLimitUp = 0, speedLimitDown = 0;// Mark, I added these for you
 		if(driver.getRawAxis(6) == -1 || shooter.getRawAxis(6) == -1)
 		{
-		  rightGrabber.set(upSpeed);// * 1.0128125);// Mark's code (this line)find the right number
+		  grabberArmSpeed += grabberSpeedIncrement;
+		  speedLimitUp = upSpeed;
+		  grabberPreviouslyUp = true;
+		  // Mark, what value should speedLimitUp and speedLimit down have here?
+		  // Hint:  You definitely want to set both of them here
+		  // What else needs to be set here?  Hint:  See the else case for this block - what variable hasn't been used yet?// Hint:  You definitely want to set both of them
 		}
 		else if(driver.getRawAxis(6) == 1 || shooter.getRawAxis(6) == 1)
 		{
-			rightGrabber.set(downSpeed);// * 1.0128125);// Mark's code (and this one)find the right number
+		  grabberArmSpeed -= grabberSpeedIncrement;
+		  speedLimitDown = downSpeed;
+		  grabberPreviouslyUp = false;
+		  // Mark, what value should speedLimitUp and speedLimit down have here?
+		  // Hint:  You definitely want to set both of them here
+		  // What else needs to be set here?  Hint:  See the else case for this block - what variable hasn't been used yet?// Hint:  You definitely want to set both of them
 		}
 		else
 		{
-		  rightGrabber.set(0.0);
+
+			if(grabberPreviouslyUp = true && grabberArmSpeed > 0)
+			{
+				grabberArmSpeed -= grabberSpeedIncrement;
+			}
+			else if(grabberPreviouslyUp = false && grabberArmSpeed < 0)
+			{
+				grabberArmSpeed += grabberSpeedIncrement;
+			}
+			// Mark, what goes here?
+			// Hint:  You do not want to change speedLimitUp and speedLimitDown here!
+			// Hint #2:  We haven't used the boolean we created, grabberPreviouslyUp yet!
+			// Hint #3:  Think about what we want to happen when the user releases the button.
+			//           We want to bring the speed towards zero
 		}
+
+		if(grabberArmSpeed > speedLimitUp)
+		{
+			grabberArmSpeed = speedLimitUp;
+		}
+		else if(grabberArmSpeed < speedLimitDown)
+		{
+			grabberArmSpeed = speedLimitDown;
+		}
+
+		rightGrabber.set(grabberArmSpeed);
+		leftGrabber.set(grabberArmSpeed);
+		System.out.print("Speed = " + grabberArmSpeed);
 
 		if(driver3.IsPressed() || shooter3.IsPressed())
 		{

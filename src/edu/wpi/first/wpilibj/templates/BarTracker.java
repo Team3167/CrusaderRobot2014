@@ -17,7 +17,9 @@ import edu.wpi.first.wpilibj.image.NIVisionException;
 public class BarTracker
 {
 
-  VisionTarget.Threshold firstColor = new VisionTarget.Threshold(0, 20, 60, 255, 0, 255);
+  VisionTarget.Threshold firstColor = new VisionTarget.Threshold(0, 20, 60, 255, 0, 255); //Green Target
+  //UV Target 90, 200, 70, 220, 160, 255
+  //Red Target 230, 255, 50, 190, 50, 170 ****Ryan thinks this will be best
   AxisCamera camera = AxisCamera.getInstance();
 
   public BarTracker()
