@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
  * @author Ryan Young
  */
 public class DriveController
-{ 
+{
   private RobotDrive driver;
   public static final double LEFT = -0.1;
   public static final double RIGHT = 0.1;

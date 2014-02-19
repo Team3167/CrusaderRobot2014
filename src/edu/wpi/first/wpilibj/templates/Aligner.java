@@ -29,7 +29,7 @@ public class Aligner
 
   public void align(DriveController drive)
   {
-      
+
       BarTracker tracker = new BarTracker();
       try
       {
@@ -64,8 +64,7 @@ public class Aligner
 
         }
         System.out.println(servoCommand);
-	drive.setCommand(cmdFilter.Apply(servoCommand));
-
+		drive.setCommand(cmdFilter.Apply(servoCommand));
       }
       catch (Exception e)
       {

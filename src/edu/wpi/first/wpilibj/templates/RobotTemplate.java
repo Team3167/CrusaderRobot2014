@@ -14,7 +14,7 @@ import judge.util.JoystickButton;
  * All of this code is available from github.com/Team3167/CrusaderRobot2014
  * there is also a wiki page on the github so that people can find the
  * controls.
- * @author Eric Slaweski, Mark Macerator
+ * @author Eric Slaweski, Mark Macerato
  */
 public class RobotTemplate extends IterativeRobot
 {
@@ -56,8 +56,8 @@ public class RobotTemplate extends IterativeRobot
 	private Jaguar shooterFR; //Front Right
 	private Jaguar shooterFL; //Front left
 	private RobotDrive drive;
-        private Aligner aligner;
-        private DriveController driveController;
+	private Aligner aligner;
+	private DriveController driveController;
 	private double setSpeed;
     private double variance;
     private boolean varianceToggle;
@@ -100,14 +100,14 @@ public class RobotTemplate extends IterativeRobot
 		grabberSpinner = new Jaguar(1, 5);
 		//Start using the second digital sidecar
 		shooterBL = new Jaguar(2,1);
-		shooterBR = new Jaguar(2,2);
+		shooterBR = new Jaguar(2, 2);
 		shooterML = new Jaguar(2, 3);
 		shooterMR = new Jaguar(2, 4);
 		shooterFL = new Jaguar(2, 5);
 		shooterFR =	new Jaguar(2, 6);
 		drive = new RobotDrive(leftDrive, rightDrive);
-                driveController = new DriveController(drive);
-                aligner = new Aligner();
+		driveController = new DriveController(drive);
+		aligner = new Aligner();
 		setSpeed = 0.0;
         variance = 1;
         varianceToggle = false;
@@ -143,17 +143,24 @@ public class RobotTemplate extends IterativeRobot
 		}
 		drive.drive(0.0, 0.0); //and then stop
 		//and then find the tape
-
-
+		aligner.align(this.driveController);
 	}
 
     public void teleopPeriodic()
 	{
-		drive.arcadeDrive(-driver.getY(), -driver.getTwist()); // makin it easer to drive
+		if(driver10.IsPressed())
+		{
+			aligner.align(this.driveController);   //TODO: test this
+		}
+		else
+		{
+			drive.arcadeDrive(-driver.getY(), -driver.getTwist()); // makin it easer to drive
+		}
 
 //driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
 //driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
 
+		//start Marks code
 		double grabberSpeedIncrement = 60.0 * 0.3;			//Cycle rate in Hertz times speed up time in sec
 		double upSpeed = .6;//fightin against gravity
 		double downSpeed = -.15;//usin gravity
@@ -193,7 +200,7 @@ public class RobotTemplate extends IterativeRobot
 			// Hint #3:  Think about what we want to happen when the user releases the button.
 			//           We want to bring the speed towards zero
 		}
-
+		// end Marks code
 		if(grabberArmSpeed > speedLimitUp)
 		{
 			grabberArmSpeed = speedLimitUp;
@@ -269,10 +276,6 @@ public class RobotTemplate extends IterativeRobot
 		{
 			varianceToggle = false;
 		}
-        if(driver10.IsPressed())
-        {
-            aligner.align(driveController);   //TODO: test this
-        }
     }
 
     public void setAllMotors(double speed, double variance)
