@@ -6,7 +6,9 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Timer;
 import judge.util.JoystickButton;
+import judge.util.sensors.UltrasonicDistanceSensor;
 
 /**
  * This is the code for the 2014 Crusader Robot "Fido"
@@ -64,6 +66,16 @@ public class RobotTemplate extends IterativeRobot
 	private final DriverStationLCD msg = DriverStationLCD.getInstance();
 	private double grabberArmSpeed;
 	private boolean grabberPreviouslyUp;
+	private UltrasonicDistanceSensor sensor1;
+	private Timer autonomousDriveTimer;
+	private Timer autonomousShootTimer;
+	private double timeToShoot;
+	private double counter;
+	double distanceToTarget;
+	double initialDistance;
+	double startWidth;
+	double finalWidth;
+	double finalDistance;
 
     public void robotInit()
 	{
@@ -106,11 +118,21 @@ public class RobotTemplate extends IterativeRobot
 		shooterFL = new Jaguar(2, 5);
 		shooterFR =	new Jaguar(2, 6);
 		drive = new RobotDrive(leftDrive, rightDrive);
-		driveController = new DriveController(drive);
+		driveController = new DriveController(leftDrive, rightDrive);
 		aligner = new Aligner();
 		setSpeed = 0.0;
         variance = 1;
         varianceToggle = false;
+		sensor1 = new UltrasonicDistanceSensor(1, 5);
+		autonomousDriveTimer = new Timer();
+		autonomousShootTimer = new Timer();
+		timeToShoot = 3.0;
+		counter = 0.0;
+		distanceToTarget = 0.0;
+		initialDistance = 3.0;
+		startWidth = 0.0;
+		finalWidth = 0.0;
+		finalDistance = 0.0;
 	}
 
 	public void disabledInit()
@@ -134,27 +156,51 @@ public class RobotTemplate extends IterativeRobot
 
     public void autonomousPeriodic()
     {
-		double autoTime = 3.0; //time to drive in seconds
-		double count = 0.0;
-		while(count < (autoTime * 60))
+		msg.clear();
+		aligner.align(driveController);		//align with the target
+		if(counter == 0.0)
 		{
-			drive.drive(1.0, 0.0); //drive forward
-			count++;
+		    startWidth = aligner.getTargetWidth();
 		}
-		drive.drive(0.0, 0.0); //and then stop
-		//and then find the tape
-		aligner.align(this.driveController);
+		else
+		{
+			finalWidth = aligner.getTargetWidth();
+			distanceToTarget = (initialDistance / startWidth) * finalWidth;
+
+			if(distanceToTarget > finalDistance)
+			{
+			drive.drive(1.0, 0.0); //drive forward
+			}
+			else
+			{
+			drive.drive(0.0, 0.0); //and then stop
+			autonomousShootTimer.start();
+			while(autonomousShootTimer.get() < timeToShoot)
+			{
+				setAllMotors(.5, 0.0);  //shoot the ball
+			}
+			setAllMotors(0.0, 0.0);
+			autonomousShootTimer.stop();
+			}
+		}
+		counter++;
 	}
 
     public void teleopPeriodic()
 	{
 		if(driver10.IsPressed())
 		{
-			aligner.align(this.driveController);   //TODO: test this
+			//aligner.align(driveController);   //TODO: test this
+			driveController.incrementRight();
 		}
 		else
 		{
 			drive.arcadeDrive(-driver.getY(), -driver.getTwist()); // makin it easer to drive
+		}
+
+		if(driver11.IsPressed())
+		{
+			driveController.incrementLeft();
 		}
 
 //driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
@@ -212,7 +258,6 @@ public class RobotTemplate extends IterativeRobot
 
 		rightGrabber.set(grabberArmSpeed);
 		leftGrabber.set(grabberArmSpeed);
-		System.out.print("Speed = " + grabberArmSpeed);
 
 		if(driver3.IsPressed() || shooter3.IsPressed())
 		{
@@ -276,6 +321,9 @@ public class RobotTemplate extends IterativeRobot
 		{
 			varianceToggle = false;
 		}
+
+		msg.println(DriverStationLCD.Line.kUser4, 1, "Sensor is: " + sensor1.someNumber());
+		msg.updateLCD();
     }
 
     public void setAllMotors(double speed, double variance)
@@ -302,7 +350,6 @@ public class RobotTemplate extends IterativeRobot
 
     public void printSpeed(double speed)
     {
-        msg.clear();
         int number = (int) (speed * 100);
         if (varianceToggle)
         {
@@ -314,6 +361,5 @@ public class RobotTemplate extends IterativeRobot
             msg.println(DriverStationLCD.Line.kUser2, 1, "Speed is: "
                 + number);
         }
-        msg.updateLCD();
     }
 }
