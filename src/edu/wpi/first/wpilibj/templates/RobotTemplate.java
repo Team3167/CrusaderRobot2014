@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Timer;
 import judge.util.JoystickButton;
 import judge.util.sensors.UltrasonicDistanceSensor;
+import judge.util.sensors.MicroSwitch;
 
 /**
  * This is the code for the 2014 Crusader Robot "Fido" it uses 2 digital
@@ -71,11 +72,14 @@ public class RobotTemplate extends IterativeRobot
 	private Timer autonomousShootTimer;
 	private double timeToShoot;
 	private double counter;
-	double distanceToTarget;
-	double initialDistance;
-	double startWidth;
-	double finalWidth;
-	double finalDistance;
+	private double distanceToTarget;
+	private double initialDistance;
+	private double startWidth;
+	private double finalWidth;
+	private double finalDistance;
+	private boolean startOnce;
+	private int beginAlign;
+	private MicroSwitch switch1;
 
 	public void robotInit()
 	{
@@ -129,10 +133,13 @@ public class RobotTemplate extends IterativeRobot
 		timeToShoot = 3.0;
 		counter = 0.0;
 		distanceToTarget = 0.0;
-		initialDistance = 3.0;
+		initialDistance = 5.0;
 		startWidth = 0.0;
 		finalWidth = 0.0;
-		finalDistance = 0.0;
+		finalDistance = 2.0;
+		startOnce = true;
+		beginAlign = 0;
+		switch1 = new MicroSwitch();
 	}
 
 	public void disabledInit()
@@ -157,14 +164,24 @@ public class RobotTemplate extends IterativeRobot
 	public void autonomousPeriodic()
 	{
 		msg.clear();
-		aligner.align(driveController);		//align with the target
+		if(beginAlign == 60)
+		{
+			aligner.align(driveController);		//align with the target
+			beginAlign--;
+			if(beginAlign <= 0)
+			{
+				beginAlign = 0;
+			}
+		}
 		if (counter == 0.0)
 		{
 			startWidth = aligner.getTargetWidth();
+			System.out.println(startWidth);
 		}
 		else
 		{
 			finalWidth = aligner.getTargetWidth();
+			System.out.println(finalWidth);
 			distanceToTarget = (initialDistance / startWidth) * finalWidth;
 
 			if (distanceToTarget > finalDistance)
@@ -174,25 +191,38 @@ public class RobotTemplate extends IterativeRobot
 			else
 			{
 				drive.arcadeDrive(0.0, 0.0); //and then stop
-				autonomousShootTimer.start();
-				while (autonomousShootTimer.get() < timeToShoot)
+				if (startOnce)
+				{
+					autonomousShootTimer.start();
+					startOnce = false;
+				}
+
+				if (autonomousShootTimer.get() < timeToShoot)
 				{
 					setAllMotors(.5, 1.0);  //shoot the ball
 				}
-				setAllMotors(0.0, 0.0);
-				autonomousShootTimer.stop();
+				else
+				{
+					setAllMotors(0.0, 0.0);
+					autonomousShootTimer.stop();
+				}
 			}
 		}
 		counter++;
 
-//		autonomousDriveTimer.start();
+//		if(startOnce)
+//		{
+//			autonomousDriveTimer.start();
+//			startOnce = false;
+//		}
+//
 //		if (autonomousDriveTimer.get() > 2)
 //		{
 //			drive.arcadeDrive(0.0, 0.0);
 //		}
 //		else
 //		{
-//			drive.arcadeDrive(1.0, 0.0);
+//			drive.arcadeDrive(.75, 0.0);
 //		}
 //
 //		if (autonomousDriveTimer.get() > 7)
@@ -210,13 +240,12 @@ public class RobotTemplate extends IterativeRobot
 //			leftGrabber.set(0.0);
 //			grabberSpinner.set(0.0);
 //		}
-//		if (autonomousDriveTimer.get() > 3)
+//		else if(autonomousDriveTimer.get() > 3)
 //		{
 //			rightGrabber.set(-.25);
 //			leftGrabber.set(-.25);
 //			grabberSpinner.set(1);
 //		}
-
 	}
 
 	public void teleopPeriodic()
