@@ -4,20 +4,22 @@
  */
 package edu.wpi.first.wpilibj.templates;
 
-import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Jaguar;
 /**
  *
  * @author Ryan Young
  */
 public class DriveController
 {
-  private RobotDrive driver;
+  private Jaguar lMotor;
+  private Jaguar rMotor;
   public static final double LEFT = -0.1;
   public static final double RIGHT = 0.1;
 
-  public DriveController(RobotDrive driver)
+  public DriveController(Jaguar left, Jaguar right)
   {
-	  this.driver = driver;
+	  this.lMotor = left;
+	  this.rMotor = right;
   }
 
   public void setCommand(double cmd)
@@ -38,18 +40,21 @@ public class DriveController
 	 }
   }
 
-  private void incrementLeft()
+  public void incrementLeft()
   {
-	  driver.arcadeDrive(0.0, LEFT);
+	  lMotor.set(LEFT);
+	  rMotor.set(-LEFT);
   }
 
-  private void incrementRight()
+  public void incrementRight()
   {
-	  driver.arcadeDrive(0.0, RIGHT);
+	  lMotor.set(RIGHT);
+	  rMotor.set(-RIGHT);
   }
 
   private void stop()
   {
-	  driver.arcadeDrive(0.0, 0.0);
+	  lMotor.set(0.0);
+	  rMotor.set(0.0);
   }
 }

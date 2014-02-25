@@ -1,6 +1,5 @@
 package edu.wpi.first.wpilibj.templates;
 
-
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
@@ -11,41 +10,42 @@ import judge.util.JoystickButton;
 import judge.util.sensors.UltrasonicDistanceSensor;
 
 /**
- * This is the code for the 2014 Crusader Robot "Fido"
- * it uses 2 digital sidecars this year.
- * All of this code is available from github.com/Team3167/CrusaderRobot2014
- * there is also a wiki page on the github so that people can find the
- * controls.
+ * This is the code for the 2014 Crusader Robot "Fido" it uses 2 digital
+ * sidecars this year. All of this code is available from
+ * github.com/Team3167/CrusaderRobot2014 there is also a wiki page on the github
+ * so that people can find the controls.
+ *
  * @author Eric Slaweski, Mark Macerato
  */
 public class RobotTemplate extends IterativeRobot
 {
+
 	private Joystick driver;
 	private Joystick shooter;
 	private JoystickButton driver1;
-    private JoystickButton driver2;
-    private JoystickButton driver3;
-    private JoystickButton driver4;
-    private JoystickButton driver5;
-    private JoystickButton driver6;
-    private JoystickButton driver7;
-    private JoystickButton driver8;
-    private JoystickButton driver9;
-    private JoystickButton driver10;
-    private JoystickButton driver11;
-    private JoystickButton driver12;
+	private JoystickButton driver2;
+	private JoystickButton driver3;
+	private JoystickButton driver4;
+	private JoystickButton driver5;
+	private JoystickButton driver6;
+	private JoystickButton driver7;
+	private JoystickButton driver8;
+	private JoystickButton driver9;
+	private JoystickButton driver10;
+	private JoystickButton driver11;
+	private JoystickButton driver12;
 	private JoystickButton shooter1;
-    private JoystickButton shooter2;
-    private JoystickButton shooter3;
-    private JoystickButton shooter4;
-    private JoystickButton shooter5;
-    private JoystickButton shooter6;
-    private JoystickButton shooter7;
-    private JoystickButton shooter8;
-    private JoystickButton shooter9;
-    private JoystickButton shooter10;
-    private JoystickButton shooter11;
-    private JoystickButton shooter12;
+	private JoystickButton shooter2;
+	private JoystickButton shooter3;
+	private JoystickButton shooter4;
+	private JoystickButton shooter5;
+	private JoystickButton shooter6;
+	private JoystickButton shooter7;
+	private JoystickButton shooter8;
+	private JoystickButton shooter9;
+	private JoystickButton shooter10;
+	private JoystickButton shooter11;
+	private JoystickButton shooter12;
 	private Jaguar leftDrive;
 	private Jaguar rightDrive;
 	private Jaguar leftGrabber;
@@ -61,8 +61,8 @@ public class RobotTemplate extends IterativeRobot
 	private Aligner aligner;
 	private DriveController driveController;
 	private double setSpeed;
-    private double variance;
-    private boolean varianceToggle;
+	private double variance;
+	private boolean varianceToggle;
 	private final DriverStationLCD msg = DriverStationLCD.getInstance();
 	private double grabberArmSpeed;
 	private boolean grabberPreviouslyUp;
@@ -77,7 +77,7 @@ public class RobotTemplate extends IterativeRobot
 	double finalWidth;
 	double finalDistance;
 
-    public void robotInit()
+	public void robotInit()
 	{
 		driver = new Joystick(2);// the right Joystick
 		driver1 = new JoystickButton(driver, 1);
@@ -111,18 +111,18 @@ public class RobotTemplate extends IterativeRobot
 		leftGrabber = new Jaguar(1, 3);
 		grabberSpinner = new Jaguar(1, 5);
 		//Start using the second digital sidecar
-		shooterBL = new Jaguar(2,1);
+		shooterBL = new Jaguar(2, 1);
 		shooterBR = new Jaguar(2, 2);
 		shooterML = new Jaguar(2, 3);
 		shooterMR = new Jaguar(2, 4);
 		shooterFL = new Jaguar(2, 5);
-		shooterFR =	new Jaguar(2, 6);
+		shooterFR = new Jaguar(2, 6);
 		drive = new RobotDrive(leftDrive, rightDrive);
 		driveController = new DriveController(leftDrive, rightDrive);
 		aligner = new Aligner();
 		setSpeed = 0.0;
-        variance = 1;
-        varianceToggle = false;
+		variance = 1;
+		varianceToggle = false;
 		sensor1 = new UltrasonicDistanceSensor(1, 5);
 		autonomousDriveTimer = new Timer();
 		autonomousShootTimer = new Timer();
@@ -136,59 +136,92 @@ public class RobotTemplate extends IterativeRobot
 	}
 
 	public void disabledInit()
-    {
-        System.out.println("The Robot is ready to Rock and Roll!");
+	{
+		System.out.println("The Robot is ready to Rock and Roll!");
 		msg.clear();
 		msg.println(DriverStationLCD.Line.kUser2, 1, "The Robot Is Ready To");
 		msg.println(DriverStationLCD.Line.kUser3, 1, " Rock And Roll!");
 		msg.updateLCD();
-    }
+	}
 
-    public void disabledContinuous()
-    {
-        //nothing goes here!
-    }
+	public void disabledContinuous()
+	{
+		//nothing goes here!
+	}
 
 	public void disabledPeriodic()
-    {
-        //nothing goes here!
-    }
+	{
+		//nothing goes here!
+	}
 
-    public void autonomousPeriodic()
-    {
+	public void autonomousPeriodic()
+	{
 		msg.clear();
 		aligner.align(driveController);		//align with the target
-		if(counter == 0.0)
+		if (counter == 0.0)
 		{
-		    startWidth = aligner.getTargetWidth();
+			startWidth = aligner.getTargetWidth();
 		}
 		else
 		{
 			finalWidth = aligner.getTargetWidth();
 			distanceToTarget = (initialDistance / startWidth) * finalWidth;
 
-			if(distanceToTarget > finalDistance)
+			if (distanceToTarget > finalDistance)
 			{
-			drive.drive(1.0, 0.0); //drive forward
+				drive.arcadeDrive(1.0, 0.0); //drive forward
 			}
 			else
 			{
-			drive.drive(0.0, 0.0); //and then stop
-			autonomousShootTimer.start();
-			while(autonomousShootTimer.get() < timeToShoot)
-			{
-				setAllMotors(.5, 0.0);  //shoot the ball
-			}
-			setAllMotors(0.0, 0.0);
-			autonomousShootTimer.stop();
+				drive.arcadeDrive(0.0, 0.0); //and then stop
+				autonomousShootTimer.start();
+				while (autonomousShootTimer.get() < timeToShoot)
+				{
+					setAllMotors(.5, 1.0);  //shoot the ball
+				}
+				setAllMotors(0.0, 0.0);
+				autonomousShootTimer.stop();
 			}
 		}
 		counter++;
+
+//		autonomousDriveTimer.start();
+//		if (autonomousDriveTimer.get() > 2)
+//		{
+//			drive.arcadeDrive(0.0, 0.0);
+//		}
+//		else
+//		{
+//			drive.arcadeDrive(1.0, 0.0);
+//		}
+//
+//		if (autonomousDriveTimer.get() > 7)
+//		{
+//			setAllMotors(0.0, 0.0);
+//		}
+//		else if (autonomousDriveTimer.get() > 2)
+//		{
+//			setAllMotors(.5, 1.0);
+//		}
+//
+//		if (autonomousDriveTimer.get() > 7)
+//		{
+//			rightGrabber.set(0.0);
+//			leftGrabber.set(0.0);
+//			grabberSpinner.set(0.0);
+//		}
+//		if (autonomousDriveTimer.get() > 3)
+//		{
+//			rightGrabber.set(-.25);
+//			leftGrabber.set(-.25);
+//			grabberSpinner.set(1);
+//		}
+
 	}
 
-    public void teleopPeriodic()
+	public void teleopPeriodic()
 	{
-		if(driver10.IsPressed())
+		if (driver10.IsPressed())
 		{
 			//aligner.align(driveController);   //TODO: test this
 			driveController.incrementRight();
@@ -198,7 +231,7 @@ public class RobotTemplate extends IterativeRobot
 			drive.arcadeDrive(-driver.getY(), -driver.getTwist()); // makin it easer to drive
 		}
 
-		if(driver11.IsPressed())
+		if (driver11.IsPressed())
 		{
 			driveController.incrementLeft();
 		}
@@ -207,116 +240,126 @@ public class RobotTemplate extends IterativeRobot
 //driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
 
 		//start Marks code
-		double grabberSpeedIncrement = 60.0 * 0.3;			//Cycle rate in Hertz times speed up time in sec
+		double grabberSpeedIncrement = 60.0 * 0.3;//Cycle rate in Hertz times speed up time in sec
 		double upSpeed = .6;//fightin against gravity
 		double downSpeed = -.15;//usin gravity
-		double speedLimitUp = 0, speedLimitDown = 0;// Mark, I added these for you
-		if(driver.getRawAxis(6) == -1 || shooter.getRawAxis(6) == -1)
+		double speedLimitUp = 0, speedLimitDown = 0;
+		if (driver.getRawAxis(6) == -1 || shooter.getRawAxis(6) == -1)
 		{
-		  grabberArmSpeed += grabberSpeedIncrement;
-		  speedLimitUp = upSpeed;
-		  grabberPreviouslyUp = true;
-		  // Mark, what value should speedLimitUp and speedLimit down have here?
-		  // Hint:  You definitely want to set both of them here
-		  // What else needs to be set here?  Hint:  See the else case for this block - what variable hasn't been used yet?// Hint:  You definitely want to set both of them
+			grabberArmSpeed += grabberSpeedIncrement;
+			speedLimitUp = upSpeed;
+			grabberPreviouslyUp = true;
 		}
-		else if(driver.getRawAxis(6) == 1 || shooter.getRawAxis(6) == 1)
+		else if (driver.getRawAxis(6) == 1 || shooter.getRawAxis(6) == 1)
 		{
-		  grabberArmSpeed -= grabberSpeedIncrement;
-		  speedLimitDown = downSpeed;
-		  grabberPreviouslyUp = false;
-		  // Mark, what value should speedLimitUp and speedLimit down have here?
-		  // Hint:  You definitely want to set both of them here
-		  // What else needs to be set here?  Hint:  See the else case for this block - what variable hasn't been used yet?// Hint:  You definitely want to set both of them
-		}
-		else
-		{
-
-			if(grabberPreviouslyUp = true && grabberArmSpeed > 0)
+			if (driver.getRawAxis(6) == 1 || shooter.getRawAxis(6) == 1)
 			{
 				grabberArmSpeed -= grabberSpeedIncrement;
+				speedLimitDown = downSpeed;
+				grabberPreviouslyUp = false;
 			}
-			else if(grabberPreviouslyUp = false && grabberArmSpeed < 0)
+			else
 			{
-				grabberArmSpeed += grabberSpeedIncrement;
+
+				if (grabberPreviouslyUp = true && grabberArmSpeed > 0)
+				{
+					grabberArmSpeed -= grabberSpeedIncrement;
+				}
+				else if (grabberPreviouslyUp = false && grabberArmSpeed < 0)
+				{
+					if (grabberPreviouslyUp = false && grabberArmSpeed < 0)
+					{
+						grabberArmSpeed += grabberSpeedIncrement;
+					}
+				}
 			}
-			// Mark, what goes here?
-			// Hint:  You do not want to change speedLimitUp and speedLimitDown here!
-			// Hint #2:  We haven't used the boolean we created, grabberPreviouslyUp yet!
-			// Hint #3:  Think about what we want to happen when the user releases the button.
-			//           We want to bring the speed towards zero
 		}
 		// end Marks code
-		if(grabberArmSpeed > speedLimitUp)
+		if (grabberArmSpeed > speedLimitUp)
 		{
 			grabberArmSpeed = speedLimitUp;
 		}
-		else if(grabberArmSpeed < speedLimitDown)
+		else if (grabberArmSpeed < speedLimitDown)
 		{
-			grabberArmSpeed = speedLimitDown;
+			if (grabberArmSpeed < speedLimitDown)
+			{
+				grabberArmSpeed = speedLimitDown;
+			}
 		}
 
 		rightGrabber.set(grabberArmSpeed);
 		leftGrabber.set(grabberArmSpeed);
 
-		if(driver3.IsPressed() || shooter3.IsPressed())
+		if (driver3.IsPressed() || shooter3.IsPressed())
 		{
 			grabberSpinner.set(1.0);
 		}
-		else if(driver5.IsPressed() || shooter5.IsPressed())
+		else if (driver5.IsPressed() || shooter5.IsPressed())
 		{
-			grabberSpinner.set(-1.0);
-		}
-		else
-		{
-			grabberSpinner.set(0.0);
+			if (driver5.IsPressed() || shooter5.IsPressed())
+			{
+				grabberSpinner.set(-1.0);
+			}
+			else
+			{
+				grabberSpinner.set(0.0);
+			}
 		}
 
 		if (varianceToggle)// are we changeing the variance
-        {
-            variance = ((shooter.getThrottle() * -1 / 2) + .5);
-            if (variance > 1)
-            {
-                variance = 1;
-            }
-            else if (variance < 0)
-            {
-                variance = 0;
-            }
-            printSpeed(variance);
-        }
-        else
-        {
-            setSpeed = ((shooter.getThrottle() * -1 / 2) + .5);
-            if (setSpeed > 1)
-            {
-                setSpeed = 1;
-            }
-            else if (setSpeed < 0)
-            {
-                setSpeed = 0;
-            }
-            printSpeed(setSpeed);
-        }
+		{
+			variance = ((shooter.getThrottle() * -1 / 2) + .5);
+			if (variance > 1)
+			{
+				variance = 1;
+			}
+			else if (variance < 0)
+			{
+				if (variance < 0)
+				{
+					variance = 0;
+				}
+			}
+			printSpeed(variance);
+		}
+		else
+		{
+			setSpeed = ((shooter.getThrottle() * -1 / 2) + .5);
+			if (setSpeed > 1)
+			{
+				setSpeed = 1;
+			}
+			else if (setSpeed < 0)
+			{
+				if (setSpeed < 0)
+				{
+					setSpeed = 0;
+				}
+			}
+			printSpeed(setSpeed);
+		}
 
-        if (driver4.IsPressed() || shooter4.IsPressed())
-        {
-            setAllMotors(setSpeed, variance);
-        }
-        else if (driver6.IsPressed() || shooter6.IsPressed())
-        {
-            setAllMotors(setSpeed * -1, variance);
-            printSpeed(setSpeed);
-        }
-        else
-        {
-            setAllMotors(0.0, variance);
-        }
+		if (driver4.IsPressed() || shooter4.IsPressed())
+		{
+			setAllMotors(setSpeed, variance);
+		}
+		else if (driver6.IsPressed() || shooter6.IsPressed())
+		{
+			if (driver6.IsPressed() || shooter6.IsPressed())
+			{
+				setAllMotors(setSpeed * -1, variance);
+				printSpeed(setSpeed);
+			}
+			else
+			{
+				setAllMotors(0.0, variance);
+			}
+		}
 
-        if (shooter8.IsPressed())
-        {
-            varianceToggle = true;
-        }
+		if (shooter8.IsPressed())
+		{
+			varianceToggle = true;
+		}
 		else
 		{
 			varianceToggle = false;
@@ -324,42 +367,42 @@ public class RobotTemplate extends IterativeRobot
 
 		msg.println(DriverStationLCD.Line.kUser4, 1, "Sensor is: " + sensor1.someNumber());
 		msg.updateLCD();
-    }
+	}
 
-    public void setAllMotors(double speed, double variance)
-    {
-        if (speed <= 0)
-        {
-            shooterFL.set(-speed);
-            shooterFR.set(speed);
+	public void setAllMotors(double speed, double variance)
+	{
+		if (speed <= 0)
+		{
+			shooterFL.set(-speed);
+			shooterFR.set(speed);
 			shooterML.set(-speed);
 			shooterMR.set(speed);
-            shooterBL.set(-speed);
-            shooterBR.set(speed);
-        }
-        else
-        {
-            shooterFL.set(-speed);
-            shooterFR.set(speed);
+			shooterBL.set(-speed);
+			shooterBR.set(speed);
+		}
+		else
+		{
+			shooterFL.set(-speed);
+			shooterFR.set(speed);
 			shooterML.set(-speed * variance);
 			shooterMR.set(speed * variance);
-            shooterBL.set(-speed * (variance* variance));
-            shooterBR.set(speed * (variance * variance));
-        }
-    }
+			shooterBL.set(-speed * (variance * variance));
+			shooterBR.set(speed * (variance * variance));
+		}
+	}
 
-    public void printSpeed(double speed)
-    {
-        int number = (int) (speed * 100);
-        if (varianceToggle)
-        {
-            msg.println(DriverStationLCD.Line.kUser2, 1, "Varaince is: "
-                + number);
-        }
-        else
-        {
-            msg.println(DriverStationLCD.Line.kUser2, 1, "Speed is: "
-                + number);
-        }
-    }
+	public void printSpeed(double speed)
+	{
+		int number = (int) (speed * 100);
+		if (varianceToggle)
+		{
+			msg.println(DriverStationLCD.Line.kUser2, 1, "Varaince is: "
+					+ number);
+		}
+		else
+		{
+			msg.println(DriverStationLCD.Line.kUser2, 1, "Speed is: "
+					+ number);
+		}
+	}
 }
