@@ -164,11 +164,11 @@ public class RobotTemplate extends IterativeRobot
 	public void autonomousPeriodic()
 	{
 		msg.clear();
-		if(beginAlign == 60)
+		if (beginAlign == 60)
 		{
 			aligner.align(driveController);		//align with the target
 			beginAlign--;
-			if(beginAlign <= 0)
+			if (beginAlign <= 0)
 			{
 				beginAlign = 0;
 			}
@@ -303,7 +303,7 @@ public class RobotTemplate extends IterativeRobot
 				}
 			}
 		}
-		// end Marks code
+
 		if (grabberArmSpeed > speedLimitUp)
 		{
 			grabberArmSpeed = speedLimitUp;
@@ -316,8 +316,18 @@ public class RobotTemplate extends IterativeRobot
 			}
 		}
 
-		rightGrabber.set(grabberArmSpeed);
-		leftGrabber.set(grabberArmSpeed);
+		if (switch1.switchActivated() == false)
+		{
+			rightGrabber.set(grabberArmSpeed);
+			leftGrabber.set(grabberArmSpeed);
+		}
+		else if (grabberArmSpeed <= 0)
+		{
+			rightGrabber.set(grabberArmSpeed);
+			leftGrabber.set(grabberArmSpeed);
+		}
+		// end Marks code
+
 
 		if (driver3.IsPressed() || shooter3.IsPressed())
 		{
@@ -325,14 +335,11 @@ public class RobotTemplate extends IterativeRobot
 		}
 		else if (driver5.IsPressed() || shooter5.IsPressed())
 		{
-			if (driver5.IsPressed() || shooter5.IsPressed())
-			{
-				grabberSpinner.set(-1.0);
-			}
-			else
-			{
-				grabberSpinner.set(0.0);
-			}
+			grabberSpinner.set(-1.0);
+		}
+		else
+		{
+			grabberSpinner.set(0.0);
 		}
 
 		if (varianceToggle)// are we changeing the variance
@@ -374,16 +381,14 @@ public class RobotTemplate extends IterativeRobot
 		}
 		else if (driver6.IsPressed() || shooter6.IsPressed())
 		{
-			if (driver6.IsPressed() || shooter6.IsPressed())
-			{
-				setAllMotors(setSpeed * -1, variance);
+	    		setAllMotors(setSpeed * -1, variance);
 				printSpeed(setSpeed);
-			}
-			else
-			{
-				setAllMotors(0.0, variance);
-			}
 		}
+		else
+		{
+				setAllMotors(0.0, variance);
+		}
+
 
 		if (shooter8.IsPressed())
 		{
@@ -394,9 +399,12 @@ public class RobotTemplate extends IterativeRobot
 			varianceToggle = false;
 		}
 
-		msg.println(DriverStationLCD.Line.kUser4, 1, "Sensor is: " + sensor1.someNumber());
+		System.out.println(switch1.getVoltage());
 		msg.updateLCD();
+
 	}
+
+
 
 	public void setAllMotors(double speed, double variance)
 	{

@@ -28,47 +28,25 @@ public class MicroSwitch{
 	private AnalogChannel microswitch = new AnalogChannel(1, 1);
 
 
-    public void robotInit() {
+	public double getVoltage(){
 
-    }
+		double voltage;
+		voltage = microswitch.getVoltage();
+		return voltage;
 
-    /**
-     * This function is called periodically during autonomous
-     */
-	 public void disabledInit()
-    {
-		msg.clear();
-        System.out.println("The Robot is ready to Rock and Roll!");
-		msg.updateLCD();
-    }
+	}
 
-    public void autonomousPeriodic() {
 
-    }
-
-    /**
-     * This function is called periodically during operator control
-     */
-    public void teleopPeriodic() {
-
-		msg.clear();
-		msg.println(DriverStationLCD.Line.kUser2, 1, "" + microswitch.getVoltage());
+    public boolean switchActivated() {
 
 		if(microswitch.getVoltage() < 2)
 		{
-			msg.println(DriverStationLCD.Line.kUser2, 1, "Stop Raising the Grabber!");
-
-
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 
-		msg.updateLCD();
 	}
-
-    /**
-     * This function is called periodically during test mode
-     */
-    public void testPeriodic() {
-
-    }
 }
-

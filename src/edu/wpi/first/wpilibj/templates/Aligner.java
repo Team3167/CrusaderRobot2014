@@ -86,7 +86,7 @@ public class Aligner
       {
         VisionTarget[] targets = tracker.getTarget();
 		targetWidth = findWidth(targets[0], targets[1]);
-		System.out.println("Target width= " + targetWidth);
+
 	  }
 
       catch (Exception e)
@@ -111,14 +111,13 @@ public class Aligner
   {
 	 double x1 = t1.getRawXPosition();
      double x2 = t2.getRawXPosition();
-	 System.out.println("x1= " + x1);
-	 System.out.println("x2= " + x2);
+
 	 double width = x2 - x1;
 	 if(width < 0)
 	 {
 		width = width * -1;
 	 }
-	 System.out.println("Width= " + width);
+	 
 	 return width;
   }
 
