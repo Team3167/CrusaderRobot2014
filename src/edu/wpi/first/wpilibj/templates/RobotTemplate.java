@@ -20,7 +20,7 @@ import judge.util.sensors.MicroSwitch;
  */
 public class RobotTemplate extends IterativeRobot
 {
-
+    
 	private Joystick driver;
 	private Joystick shooter;
 	private JoystickButton driver1;
@@ -150,7 +150,7 @@ public class RobotTemplate extends IterativeRobot
 		msg.println(DriverStationLCD.Line.kUser3, 1, " Rock And Roll!");
 		msg.updateLCD();
 	}
-
+        
 	public void disabledContinuous()
 	{
 		//nothing goes here!
