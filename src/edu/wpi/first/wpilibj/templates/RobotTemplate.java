@@ -82,6 +82,7 @@ public class RobotTemplate extends IterativeRobot
     private int beginAlign;
     private MicroSwitch switch1;
     private Ultrasonic distanceSensor;
+    private boolean directionToggle;
 
     public void robotInit()
     {
@@ -143,6 +144,11 @@ public class RobotTemplate extends IterativeRobot
         beginAlign = 0;
         switch1 = new MicroSwitch();
         distanceSensor = new Ultrasonic(1, 2);
+        
+        distanceSensor.setEnabled(true);
+        distanceSensor.setAutomaticMode(true);
+        
+        directionToggle = true;
     }
 
     public void disabledInit()
@@ -167,6 +173,22 @@ public class RobotTemplate extends IterativeRobot
     public void autonomousPeriodic()
     {
         msg.clear();
+        if(startOnce)
+        {
+            startOnce = false;
+            autonomousDriveTimer.start();
+        }
+        else if(autonomousDriveTimer.get() < 1)
+        {
+            leftDrive.set(-.8);
+            rightDrive.set(.8);
+        }
+        else
+        {
+            leftDrive.set(0.0);
+            rightDrive.set(0.0);
+        }
+    
 //        if (beginAlign == 60)
 //        {
 //            aligner.align(driveController);		//align with the target
@@ -220,19 +242,110 @@ public class RobotTemplate extends IterativeRobot
 //		}
 //
 //		if (autonomousDriveTimer.get() > 2)
-//		{
-//			drive.arcadeDrive(0.0, 0.0);
-//		}
-//		else
-//		{
-//			drive.arcadeDrive(.75, 0.0);
-//		}
+////		{
+////			drive.arcadeDrive(0.0, 0.0);
+////		}
+////		else
+////		{
+////			drive.arcadeDrive(.75, 0.0);
+////		}
+////
+////		if (autonomousDriveTimer.get() > 7)
+////		{
+////			setAllMotors(0.0, 0.0);
+////		}
+////		else if (autonomousDriveTimer.get() > 2)
+////		{
+////			setAllMotors(.5, 1.0);
+////		}
+////
+////		if (autonomousDriveTimer.get() > 7)
+////		{
+////			rightGrabber.set(0.0);
+////			leftGrabber.set(0.0);
+////			grabberSpinner.set(0.0);
+////		}
+////		else if(autonomousDriveTimer.get() > 3)
+////		{
+////			rightGrabber.set(-.25);
+////			leftGrabber.set(-.25);
+////			grabberSpinner.set(1);
+////		}
+////        
+//        
+//        
+//        
+//        distanceSensor.ping();
+//        double distance = distanceSensor.getRangeInches();
+//        if(distance != 0)
+//        {
+//            msg.println(DriverStationLCD.Line.kUser5, 1, "" + distance);
+//            if(distance > 86)
+//            {
+//            drive.arcadeDrive(0.6, 0.0);
+//            }
+//            else if(startOnce)
+//            {
+//                autonomousDriveTimer.start();
+//            }
+//            else
+//            {
+//                counter++;
+//                drive.arcadeDrive(0.0, 0.0);
+//                if(autonomousDriveTimer.get() < 1)
+//                {
+//                    leftGrabber.set(1.0);
+//                    rightGrabber.set(1.0);
+//                }
+//                if(autonomousDriveTimer.get() > 1 && autonomousDriveTimer.get() < 1.5);
+//                {
+//                    setAllMotors(-.60);
+//                }
+//                if (autonomousDriveTimer.get() > 1.5 && autonomousDriveTimer.get() < 2.5)
+//                {
+//                    leftGrabber.set(-1.0);
+//                    rightGrabber.set(-1.0);
+//                }
+//                if(autonomousDriveTimer.get() > 2.5 && autonomousDriveTimer.get() < 5)
+//                {
+//                    grabberSpinner.set(1.0);
+//                    setAllMotors(0.75);
+//                }
+//                if(autonomousDriveTimer.get() > 5)
+//                {
+//                setAllMotors(0);
+//                }
+//            }
+//            if (counter == 0)
+//            {
+//                startOnce = true;
+//            }
+//            else
+//            {
+//                startOnce = false;
+//            }
+//        }
+//            
+//                if(autonomousDriveTimer.get() < 0.5)
+//                {
+//                    leftGrabber.set(1.0);
+//                    rightGrabber.set(1.0);
+//                }
+//                if(autonomousDriveTimer.get() < 0.75)
+//                {
+//                    leftGrabber.set(1.0);
+//                    rightGrabber.set(1.0);
+//                }
+//                if(autonomousDriveTimer.get() < 1)
+//                {
+//                        setAllMotors(-0.80, 0.0);
+//                }
 //
 //		if (autonomousDriveTimer.get() > 7)
 //		{
 //			setAllMotors(0.0, 0.0);
-//		}
-//		else if (autonomousDriveTimer.get() > 2)
+//                }
+//		else if (autonomousDriveTimer.get() > 4)
 //		{
 //			setAllMotors(.5, 1.0);
 //		}
@@ -247,49 +360,44 @@ public class RobotTemplate extends IterativeRobot
 //		{
 //			rightGrabber.set(-.25);
 //			leftGrabber.set(-.25);
-//			grabberSpinner.set(1);
+//                        grabberSpinner.set(1);
 //		}
+//            
+//      
+            
         
         
-        
-        
-        distanceSensor.ping();
-        double distance = distanceSensor.getRangeInches();
-        if(distance != 0)
-        {
-            msg.println(DriverStationLCD.Line.kUser5, 1, "" + distance);
-            if(distance > 86)
-            setAllMotors(0.8);
-            else
-            setAllMotors(0.0);
-        }      
-                
     }
 
     public void teleopPeriodic()
     {
-        if (driver10.IsPressed())
-        {
-            //aligner.align(driveController);   //TODO: test this
-            driveController.incrementRight();
-        }
-        else
-        {
-            drive.arcadeDrive(-driver.getY(), -driver.getTwist()); // makin it easer to drive
-        }
-
-        if (driver11.IsPressed())
-        {
-            driveController.incrementLeft();
-        }
+        msg.clear();
+          if(driver12.HasJustBeenPressed())
+          {
+              directionToggle = !directionToggle;
+          }
+          if(directionToggle)
+          {
+              drive.arcadeDrive(-driver.getY(), -driver.getTwist()); // makin it easer to drive
+              msg.println(DriverStationLCD.Line.kUser1, 1, "Driving Forward");
+          }
+          else
+          {
+              drive.arcadeDrive(driver.getY(), -driver.getTwist());
+              msg.println(DriverStationLCD.Line.kUser1, 1, "Driving in reverse");
+          }
+          
+          double distance = distanceSensor.getRangeInches();
+          msg.println(DriverStationLCD.Line.kUser5, 1, "Distance is " + distance);
+        
 
 //driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
 //driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
 
         //start Marks code
         double grabberSpeedIncrement = 60.0 * 0.3;//Cycle rate in Hertz times speed up time in sec
-        double upSpeed = .6;//fightin against gravity
-        double downSpeed = -.15;//usin gravity
+        double upSpeed = .7;//fightin against gravity
+        double downSpeed = -.30;//usin gravity
         double speedLimitUp = 0, speedLimitDown = 0;
         if (driver.getRawAxis(6) == -1 || shooter.getRawAxis(6) == -1)
         {
@@ -418,10 +526,10 @@ public class RobotTemplate extends IterativeRobot
         {
             shooterFL.set(-speed);
             shooterFR.set(speed);
-            shooterML.set(-speed * variance);
-            shooterMR.set(speed * variance);
-            shooterBL.set(-speed * (variance * variance));
-            shooterBR.set(speed * (variance * variance));
+            shooterML.set(-speed);
+            shooterMR.set(speed);
+            shooterBL.set(-speed);
+            shooterBR.set(speed);
         }
     }
 
@@ -450,15 +558,15 @@ public class RobotTemplate extends IterativeRobot
     public void printSpeed(double speed)
     {
         int number = (int) (speed * 100);
-        if (varianceToggle)
+       /* if (varianceToggle)
         {
-            msg.println(DriverStationLCD.Line.kUser2, 1, "Varaince is: "
+            msg.println(DriverStationLCD.Line.kUser3, 1, "Varaince is: "
                     + number);
         }
         else
-        {
-            msg.println(DriverStationLCD.Line.kUser2, 1, "Speed is: "
+        {*/
+            msg.println(DriverStationLCD.Line.kUser3, 1, "Speed is: "
                     + number);
-        }
+        //}
     }
 }
