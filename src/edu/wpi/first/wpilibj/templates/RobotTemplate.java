@@ -167,51 +167,51 @@ public class RobotTemplate extends IterativeRobot
     public void autonomousPeriodic()
     {
         msg.clear();
-        if (beginAlign == 60)
-        {
-            aligner.align(driveController);		//align with the target
-            beginAlign--;
-            if (beginAlign <= 0)
-            {
-                beginAlign = 0;
-            }
-        }
-        if (counter == 0.0)
-        {
-            startWidth = aligner.getTargetWidth();
-            System.out.println(startWidth);
-        }
-        else
-        {
-            finalWidth = aligner.getTargetWidth();
-            System.out.println(finalWidth);
-            distanceToTarget = (initialDistance / startWidth) * finalWidth;
-
-            if (distanceToTarget > finalDistance)
-            {
-                drive.arcadeDrive(1.0, 0.0); //drive forward
-            }
-            else
-            {
-                drive.arcadeDrive(0.0, 0.0); //and then stop
-                if (startOnce)
-                {
-                    autonomousShootTimer.start();
-                    startOnce = false;
-                }
-
-                if (autonomousShootTimer.get() < timeToShoot)
-                {
-                    setAllMotors(.5, 1.0);  //shoot the ball
-                }
-                else
-                {
-                    setAllMotors(0.0, 0.0);
-                    autonomousShootTimer.stop();
-                }
-            }
-        }
-        counter++;
+//        if (beginAlign == 60)
+//        {
+//            aligner.align(driveController);		//align with the target
+//            beginAlign--;
+//            if (beginAlign <= 0)
+//            {
+//                beginAlign = 0;
+//            }
+//        }
+//        if (counter == 0.0)
+//        {
+//            startWidth = aligner.getTargetWidth();
+//            System.out.println(startWidth);
+//        }
+//        else
+//        {
+//            finalWidth = aligner.getTargetWidth();
+//            System.out.println(finalWidth);
+//            distanceToTarget = (initialDistance / startWidth) * finalWidth;
+//
+//            if (distanceToTarget > finalDistance)
+//            {
+//                drive.arcadeDrive(1.0, 0.0); //drive forward
+//            }
+//            else
+//            {
+//                drive.arcadeDrive(0.0, 0.0); //and then stop
+//                if (startOnce)
+//                {
+//                    autonomousShootTimer.start();
+//                    startOnce = false;
+//                }
+//
+//                if (autonomousShootTimer.get() < timeToShoot)
+//                {
+//                    setAllMotors(.5, 1.0);  //shoot the ball
+//                }
+//                else
+//                {
+//                    setAllMotors(0.0, 0.0);
+//                    autonomousShootTimer.stop();
+//                }
+//            }
+//        }
+//        counter++;
 
 //		if(startOnce)
 //		{
@@ -253,16 +253,16 @@ public class RobotTemplate extends IterativeRobot
         
         
         
-//        distanceSensor.ping();
-//        double distance = distanceSensor.getRangeInches();
-//        if(distance != 0)
-//        {
-//            msg.println(DriverStationLCD.Line.kUser5, 1, "" + distance);
-//            if(distance > 86)
-//            setAllMotors(0.8);
-//            else
-//            setAllMotors(0.0);
-//        }      
+        distanceSensor.ping();
+        double distance = distanceSensor.getRangeInches();
+        if(distance != 0)
+        {
+            msg.println(DriverStationLCD.Line.kUser5, 1, "" + distance);
+            if(distance > 86)
+            setAllMotors(0.8);
+            else
+            setAllMotors(0.0);
+        }      
                 
     }
 
