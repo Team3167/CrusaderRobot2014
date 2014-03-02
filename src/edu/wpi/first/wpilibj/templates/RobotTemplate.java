@@ -173,200 +173,20 @@ public class RobotTemplate extends IterativeRobot
     public void autonomousPeriodic()
     {
         msg.clear();
-        if(startOnce)
-        {
-            startOnce = false;
-            autonomousDriveTimer.start();
-        }
-        else if(autonomousDriveTimer.get() < 1)
-        {
-            leftDrive.set(-.8);
-            rightDrive.set(.8);
-        }
-        else
-        {
-            leftDrive.set(0.0);
-            rightDrive.set(0.0);
-        }
-    
-//        if (beginAlign == 60)
-//        {
-//            aligner.align(driveController);		//align with the target
-//            beginAlign--;
-//            if (beginAlign <= 0)
-//            {
-//                beginAlign = 0;
-//            }
-//        }
-//        if (counter == 0.0)
-//        {
-//            startWidth = aligner.getTargetWidth();
-//            System.out.println(startWidth);
-//        }
-//        else
-//        {
-//            finalWidth = aligner.getTargetWidth();
-//            System.out.println(finalWidth);
-//            distanceToTarget = (initialDistance / startWidth) * finalWidth;
-//
-//            if (distanceToTarget > finalDistance)
-//            {
-//                drive.arcadeDrive(1.0, 0.0); //drive forward
-//            }
-//            else
-//            {
-//                drive.arcadeDrive(0.0, 0.0); //and then stop
-//                if (startOnce)
-//                {
-//                    autonomousShootTimer.start();
-//                    startOnce = false;
-//                }
-//
-//                if (autonomousShootTimer.get() < timeToShoot)
-//                {
-//                    setAllMotors(.5, 1.0);  //shoot the ball
-//                }
-//                else
-//                {
-//                    setAllMotors(0.0, 0.0);
-//                    autonomousShootTimer.stop();
-//                }
-//            }
-//        }
-//        counter++;
-
-//		if(startOnce)
-//		{
-//			autonomousDriveTimer.start();
-//			startOnce = false;
-//		}
-//
-//		if (autonomousDriveTimer.get() > 2)
-////		{
-////			drive.arcadeDrive(0.0, 0.0);
-////		}
-////		else
-////		{
-////			drive.arcadeDrive(.75, 0.0);
-////		}
-////
-////		if (autonomousDriveTimer.get() > 7)
-////		{
-////			setAllMotors(0.0, 0.0);
-////		}
-////		else if (autonomousDriveTimer.get() > 2)
-////		{
-////			setAllMotors(.5, 1.0);
-////		}
-////
-////		if (autonomousDriveTimer.get() > 7)
-////		{
-////			rightGrabber.set(0.0);
-////			leftGrabber.set(0.0);
-////			grabberSpinner.set(0.0);
-////		}
-////		else if(autonomousDriveTimer.get() > 3)
-////		{
-////			rightGrabber.set(-.25);
-////			leftGrabber.set(-.25);
-////			grabberSpinner.set(1);
-////		}
-////        
-//        
-//        
-//        
-//        distanceSensor.ping();
 //        double distance = distanceSensor.getRangeInches();
-//        if(distance != 0)
+//       if(distance > rightDistance)
 //        {
-//            msg.println(DriverStationLCD.Line.kUser5, 1, "" + distance);
-//            if(distance > 86)
-//            {
-//            drive.arcadeDrive(0.6, 0.0);
-//            }
-//            else if(startOnce)
-//            {
-//                autonomousDriveTimer.start();
-//            }
-//            else
-//            {
-//                counter++;
-//                drive.arcadeDrive(0.0, 0.0);
-//                if(autonomousDriveTimer.get() < 1)
-//                {
-//                    leftGrabber.set(1.0);
-//                    rightGrabber.set(1.0);
-//                }
-//                if(autonomousDriveTimer.get() > 1 && autonomousDriveTimer.get() < 1.5);
-//                {
-//                    setAllMotors(-.60);
-//                }
-//                if (autonomousDriveTimer.get() > 1.5 && autonomousDriveTimer.get() < 2.5)
-//                {
-//                    leftGrabber.set(-1.0);
-//                    rightGrabber.set(-1.0);
-//                }
-//                if(autonomousDriveTimer.get() > 2.5 && autonomousDriveTimer.get() < 5)
-//                {
-//                    grabberSpinner.set(1.0);
-//                    setAllMotors(0.75);
-//                }
-//                if(autonomousDriveTimer.get() > 5)
-//                {
-//                setAllMotors(0);
-//                }
-//            }
-//            if (counter == 0)
-//            {
-//                startOnce = true;
-//            }
-//            else
-//            {
-//                startOnce = false;
-//            }
+//            leftDrive.set(-1.0);
+//            rightDrive.set(1.0);
 //        }
-//            
-//                if(autonomousDriveTimer.get() < 0.5)
-//                {
-//                    leftGrabber.set(1.0);
-//                    rightGrabber.set(1.0);
-//                }
-//                if(autonomousDriveTimer.get() < 0.75)
-//                {
-//                    leftGrabber.set(1.0);
-//                    rightGrabber.set(1.0);
-//                }
-//                if(autonomousDriveTimer.get() < 1)
-//                {
-//                        setAllMotors(-0.80, 0.0);
-//                }
-//
-//		if (autonomousDriveTimer.get() > 7)
-//		{
-//			setAllMotors(0.0, 0.0);
-//                }
-//		else if (autonomousDriveTimer.get() > 4)
-//		{
-//			setAllMotors(.5, 1.0);
-//		}
-//
-//		if (autonomousDriveTimer.get() > 7)
-//		{
-//			rightGrabber.set(0.0);
-//			leftGrabber.set(0.0);
-//			grabberSpinner.set(0.0);
-//		}
-//		else if(autonomousDriveTimer.get() > 3)
-//		{
-//			rightGrabber.set(-.25);
-//			leftGrabber.set(-.25);
-//                        grabberSpinner.set(1);
-//		}
-//            
-//      
-            
-        
-        
+//        else if (distance == 0)
+//        {
+//            leftDrive.set(0.0);
+//            rightDrive.set(0.0);
+//            setAllMotors(0.0);
+//            grabberSpinner.set(0.0);
+//        }        double rightDistance = 50;
+// 
     }
 
     public void teleopPeriodic()
@@ -510,7 +330,7 @@ public class RobotTemplate extends IterativeRobot
         msg.updateLCD();
 
     }
-    
+  
     public void setAllMotors(double speed)
     {
          if (speed <= 0)
@@ -558,15 +378,15 @@ public class RobotTemplate extends IterativeRobot
     public void printSpeed(double speed)
     {
         int number = (int) (speed * 100);
-       /* if (varianceToggle)
+        if (varianceToggle)
         {
             msg.println(DriverStationLCD.Line.kUser3, 1, "Varaince is: "
                     + number);
         }
         else
-        {*/
+        {
             msg.println(DriverStationLCD.Line.kUser3, 1, "Speed is: "
                     + number);
-        //}
+        }
     }
 }
