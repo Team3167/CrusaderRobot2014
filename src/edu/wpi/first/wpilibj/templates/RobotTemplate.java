@@ -5,7 +5,11 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Jaguar;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Timer;
 import judge.util.JoystickButton;
+import judge.util.sensors.UltrasonicDistanceSensor;
+import judge.util.sensors.MicroSwitch;
+import edu.wpi.first.wpilibj.Ultrasonic;
 
 /**
  * This is the code for the 2014 Crusader Robot "Fido" it uses 2 digital
@@ -64,6 +68,21 @@ public class RobotTemplate extends IterativeRobot
     private final DriverStationLCD msg = DriverStationLCD.getInstance();
     private double grabberArmSpeed;
     private boolean grabberPreviouslyUp;
+    private UltrasonicDistanceSensor sensor1;
+    private Timer autonomousDriveTimer;
+    private Timer autonomousShootTimer;
+    private double timeToShoot;
+    private double counter;
+    private double distanceToTarget;
+    private double initialDistance;
+    private double startWidth;
+    private double finalWidth;
+    private double finalDistance;
+    private boolean startOnce;
+    private int beginAlign;
+    private MicroSwitch switch1;
+    private Ultrasonic distanceSensor;
+    private boolean directionToggle;
 
     public void robotInit()
     {
@@ -106,11 +125,30 @@ public class RobotTemplate extends IterativeRobot
         shooterFL = new Jaguar(2, 5);
         shooterFR = new Jaguar(2, 6);
         drive = new RobotDrive(leftDrive, rightDrive);
-        driveController = new DriveController(drive);
+        driveController = new DriveController(leftDrive, rightDrive);
         aligner = new Aligner();
         setSpeed = 0.0;
         variance = 1;
         varianceToggle = false;
+        sensor1 = new UltrasonicDistanceSensor(1, 5);
+        autonomousDriveTimer = new Timer();
+        autonomousShootTimer = new Timer();
+        timeToShoot = 3.0;
+        counter = 0.0;
+        distanceToTarget = 0.0;
+        initialDistance = 5.0;
+        startWidth = 0.0;
+        finalWidth = 0.0;
+        finalDistance = 2.0;
+        startOnce = true;
+        beginAlign = 0;
+        switch1 = new MicroSwitch();
+        distanceSensor = new Ultrasonic(1, 2);
+        
+        distanceSensor.setEnabled(true);
+        distanceSensor.setAutomaticMode(true);
+        
+        directionToggle = true;
     }
 
     public void disabledInit()
@@ -134,71 +172,74 @@ public class RobotTemplate extends IterativeRobot
 
     public void autonomousPeriodic()
     {
-        double autoTime = 3.0; //time to drive in seconds
-        double count = 0.0;
-        while (count < (autoTime * 60))
-        {
-            drive.drive(1.0, 0.0); //drive forward
-            count++;
-        }
-        drive.drive(0.0, 0.0); //and then stop
-        //and then find the tape
-        aligner.align(this.driveController);
+        msg.clear();
+//        double distance = distanceSensor.getRangeInches();
+//       if(distance > rightDistance)
+//        {
+//            leftDrive.set(-1.0);
+//            rightDrive.set(1.0);
+//        }
+//        else if (distance == 0)
+//        {
+//            leftDrive.set(0.0);
+//            rightDrive.set(0.0);
+//            setAllMotors(0.0);
+//            grabberSpinner.set(0.0);
+//        }        double rightDistance = 50;
+// 
     }
 
     public void teleopPeriodic()
     {
-        if (driver10.IsPressed())
-        {
-            aligner.align(this.driveController);   //TODO: test this
-        }
-        else
-        {
-            drive.arcadeDrive(-driver.getY(), -driver.getTwist()); // makin it easer to drive
-        }
+        msg.clear();
+          if(driver12.HasJustBeenPressed())
+          {
+              directionToggle = !directionToggle;
+          }
+          if(directionToggle)
+          {
+              drive.arcadeDrive(-driver.getY(), -driver.getTwist()); // makin it easer to drive
+              msg.println(DriverStationLCD.Line.kUser1, 1, "Driving Forward");
+          }
+          else
+          {
+              drive.arcadeDrive(driver.getY(), -driver.getTwist());
+              msg.println(DriverStationLCD.Line.kUser1, 1, "Driving in reverse");
+          }
+          
+          double distance = distanceSensor.getRangeInches();
+          msg.println(DriverStationLCD.Line.kUser5, 1, "Distance is " + distance);
+        
 
-        //driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
-        //driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
+//driver.getRawAxis(6) forward backward movement of the D-pad (-1 up, 1 down)
+//driver.getRawAxis(5) left right movement of the D-pad (-1 left, 1 right)
+
         //start Marks code
-        double grabberSpeedIncrement = 60.0 * 0.3;  //Cycle rate in Hertz times speed up time in sec
-        double upSpeed = .6;//fightin against gravity
-        double downSpeed = -.15;//usin gravity
-        double speedLimitUp = 0, speedLimitDown = 0;// Mark, I added these for you
+        double grabberSpeedIncrement = 60.0 * 0.3;//Cycle rate in Hertz times speed up time in sec
+        double upSpeed = .7;//fightin against gravity
+        double downSpeed = -.30;//usin gravity
+        double speedLimitUp = 0, speedLimitDown = 0;
         if (driver.getRawAxis(6) == -1 || shooter.getRawAxis(6) == -1)
         {
             grabberArmSpeed += grabberSpeedIncrement;
             speedLimitUp = upSpeed;
             grabberPreviouslyUp = true;
-            // Mark, what value should speedLimitUp and speedLimit down have here?
-            // Hint:  You definitely want to set both of them here
-            // What else needs to be set here?  Hint:  See the else case for this block - what variable hasn't been used yet?// Hint:  You definitely want to set both of them
         }
         else if (driver.getRawAxis(6) == 1 || shooter.getRawAxis(6) == 1)
         {
             grabberArmSpeed -= grabberSpeedIncrement;
             speedLimitDown = downSpeed;
             grabberPreviouslyUp = false;
-            // Mark, what value should speedLimitUp and speedLimit down have here?
-            // Hint:  You definitely want to set both of them here
-            // What else needs to be set here?  Hint:  See the else case for this block - what variable hasn't been used yet?// Hint:  You definitely want to set both of them
         }
-        else
+        else if (grabberPreviouslyUp = true && grabberArmSpeed > 0)
         {
-            if (grabberPreviouslyUp = true && grabberArmSpeed > 0)
-            {
-                grabberArmSpeed -= grabberSpeedIncrement;
-            }
-            else if (grabberPreviouslyUp = false && grabberArmSpeed < 0)
-            {
-                grabberArmSpeed += grabberSpeedIncrement;
-            }
-            // Mark, what goes here?
-            // Hint:  You do not want to change speedLimitUp and speedLimitDown here!
-            // Hint #2:  We haven't used the boolean we created, grabberPreviouslyUp yet!
-            // Hint #3:  Think about what we want to happen when the user releases the button.
-            //           We want to bring the speed towards zero
+            grabberArmSpeed -= grabberSpeedIncrement;
         }
-        // end Marks code
+        else if (grabberPreviouslyUp = false && grabberArmSpeed < 0)
+        {
+            grabberArmSpeed += grabberSpeedIncrement;
+        }
+
         if (grabberArmSpeed > speedLimitUp)
         {
             grabberArmSpeed = speedLimitUp;
@@ -208,9 +249,18 @@ public class RobotTemplate extends IterativeRobot
             grabberArmSpeed = speedLimitDown;
         }
 
-        rightGrabber.set(grabberArmSpeed);
-        leftGrabber.set(grabberArmSpeed);
-        System.out.print("Speed = " + grabberArmSpeed);
+        if (switch1.switchActivated() == false)
+        {
+            rightGrabber.set(grabberArmSpeed);
+            leftGrabber.set(grabberArmSpeed);
+        }
+        else if (grabberArmSpeed <= 0)
+        {
+            rightGrabber.set(grabberArmSpeed);
+            leftGrabber.set(grabberArmSpeed);
+        }
+        // end Marks code
+
 
         if (driver3.IsPressed() || shooter3.IsPressed())
         {
@@ -266,6 +316,7 @@ public class RobotTemplate extends IterativeRobot
             setAllMotors(0.0, variance);
         }
 
+
         if (shooter8.IsPressed())
         {
             varianceToggle = true;
@@ -273,6 +324,32 @@ public class RobotTemplate extends IterativeRobot
         else
         {
             varianceToggle = false;
+        }
+
+        System.out.println(switch1.getVoltage());
+        msg.updateLCD();
+
+    }
+  
+    public void setAllMotors(double speed)
+    {
+         if (speed <= 0)
+        {
+            shooterFL.set(-speed);
+            shooterFR.set(speed);
+            shooterML.set(-speed);
+            shooterMR.set(speed);
+            shooterBL.set(-speed);
+            shooterBR.set(speed);
+        }
+        else
+        {
+            shooterFL.set(-speed);
+            shooterFR.set(speed);
+            shooterML.set(-speed);
+            shooterMR.set(speed);
+            shooterBL.set(-speed);
+            shooterBR.set(speed);
         }
     }
 
@@ -300,18 +377,16 @@ public class RobotTemplate extends IterativeRobot
 
     public void printSpeed(double speed)
     {
-        msg.clear();
         int number = (int) (speed * 100);
         if (varianceToggle)
         {
-            msg.println(DriverStationLCD.Line.kUser2, 1, "Varaince is: "
-                                                         + number);
+            msg.println(DriverStationLCD.Line.kUser3, 1, "Varaince is: "
+                    + number);
         }
         else
         {
-            msg.println(DriverStationLCD.Line.kUser2, 1, "Speed is: "
-                                                         + number);
+            msg.println(DriverStationLCD.Line.kUser3, 1, "Speed is: "
+                    + number);
         }
-        msg.updateLCD();
     }
 }

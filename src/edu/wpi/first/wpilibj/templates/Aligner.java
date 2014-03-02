@@ -23,6 +23,7 @@ public class Aligner
 	private double freq = .250;
 	private double omega = ((2.0 * pi)) * freq;
 	private double time = 0.0;
+	double targetWidth = 0.0;
 
 	private Filter cmdFilter = new Filter(1.5, 1.0, 50.0);
 
@@ -72,9 +73,31 @@ public class Aligner
       }
 
 
+
+
     //}
 
   }
+
+  public double getTargetWidth()
+	{
+	  BarTracker tracker = new BarTracker();
+      try
+      {
+        VisionTarget[] targets = tracker.getTarget();
+		targetWidth = findWidth(targets[0], targets[1]);
+
+	  }
+
+      catch (Exception e)
+      {
+		e.printStackTrace();
+		System.out.println("Shit Broke!");
+ 		targetWidth = getTargetWidth();
+      }
+
+	  return targetWidth;
+	}
 
   private double xMidpoint(VisionTarget t1, VisionTarget t2)
   {
@@ -82,6 +105,20 @@ public class Aligner
     double x2 = t2.getRawXPosition();
     double midpoint = (x1 + x2)/2;
     return midpoint;
+  }
+
+  private double findWidth(VisionTarget t1, VisionTarget t2)
+  {
+	 double x1 = t1.getRawXPosition();
+     double x2 = t2.getRawXPosition();
+
+	 double width = x2 - x1;
+	 if(width < 0)
+	 {
+		width = width * -1;
+	 }
+	 
+	 return width;
   }
 
   private void alignOne(VisionTarget target)
